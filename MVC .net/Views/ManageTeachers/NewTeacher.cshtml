@@ -1,0 +1,41 @@
+﻿@{
+    ViewData["Title"] = "NewTeacher";
+}
+
+<div class="container ">
+    <div class="card col-lg-8 col-lg-offset-2 col-sm-12  ">
+        <div class="danger" name="wrongenter" id="wrongenter">
+            @ViewBag.Error
+        </div>
+        <br />
+        <form action="@Url.Content("~/ManageTeachers/NewTeacher")" method="post" class="col-lg-6 col-lg-offset-3 col-md-6 col-md-offset-3 col-sm-12">
+           
+            <div class="row text-center align-content-center">
+                <label for="teachername">Nombre </label>
+                <input type="text" name="teachername" id="teachername"  />
+            </div>
+
+            <div class="row text-center align-content-center">
+                <label for="teacherlastname">Apellido </label>
+                <input type="text" name="teacherlastname" id="teacherlastname"/>
+            </div>
+
+            <div class="row text-center align-content-center">
+                <label for="headteacherdni">Dni</label>
+                <input type="number" name="teacherdni" id="teacherdni" />
+            </div>
+
+            <div class="row text-center">
+                <input class="form-check-input" type="checkbox" name="isactive" id="isactive">
+                <label class="form-check-label" for="isactive">
+                    Activar/Desactivar Profesor
+                </label>
+            </div>
+
+            <div class="row text-center align-content-center">
+                <input type="submit" class="btn btn-success" value="Crear" />
+            </div>
+
+        </form>
+    </div>
+</div>

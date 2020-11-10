@@ -1,0 +1,42 @@
+﻿@{
+    ViewData["Title"] = "ModifyTeacher";
+}
+
+<div class="container ">
+    <div class="card col-lg-8 col-lg-offset-2 col-sm-12  ">
+        <div class="danger" name="wrongenter" id="wrongenter">
+            @ViewBag.Error
+        </div>
+        <br />
+        <form action="@Url.Content("~/ManageTeachers/UpdateTeacher")" method="post" class="col-lg-6 col-lg-offset-3 col-md-6 col-md-offset-3 col-sm-12">
+            <input type="hidden" name="teacherid" id="teacherid" value="@ViewBag.TeacherId" />
+
+            <div class="row text-center align-content-center">
+                <label for="teachername">Nombre </label>
+                <input type="text" name="teachername" id="teachername" value="@ViewBag.TeacherName" />
+            </div>
+
+            <div class="row text-center align-content-center">
+                <label for="teacherlastname">Apellido </label>
+                <input type="text" name="teacherlastname" id="teacherlastname" value="@ViewBag.TeacherLastName" />
+            </div>
+
+            <div class="row text-center align-content-center">
+                <label for="headteacherdni">Dni</label>
+                <input type="number" value="@ViewBag.TeacherDni" name="teacherdni" id="teacherdni" />
+            </div>
+
+            <div class="row text-center">
+                <input class="form-check-input" type="checkbox" value="@ViewBag.IsActive" name="isactive" id="isactive">
+                <label class="form-check-label" for="isactive">
+                    Activar/Desactivar Profesor
+                </label>
+            </div>
+
+            <div class="row text-center align-content-center">
+                <input type="submit" class="btn btn-success" value="Modificar" />
+            </div>
+
+        </form>
+    </div>
+</div>

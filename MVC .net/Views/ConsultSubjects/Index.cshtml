@@ -1,0 +1,38 @@
+﻿@{
+    @model List<SubjectModel>
+
+    ViewData["Title"] = "Index";
+}
+
+<h1 class="text-center">Listado de Materias</h1>
+
+<br />
+<div class="SuccessMessage" name="AddSubjectSuccess" id="AddSubjectSuccess">
+    <span>@ViewBag.Success</span>
+</div>
+<br />
+<div class="danger" name="wrongenter" id="wrongenter">
+    <p>@ViewBag.Warning</p>
+</div>
+<div class="danger" name="wrongenter" id="wrongenter">
+    <bold>@ViewBag.Error</bold>
+</div>
+<br />
+<div class="success">
+    @{ if (Model.Count != 0)
+        {
+            foreach (SubjectModel subject in Model)
+            {
+            <form method="post" action="@Url.Content("~/RegisterToSubject/")">
+                <div class="row col-lg-10 col-lg-offset-2">
+                    <input type="hidden" name="subjectid" id="subjectid" value="@subject.Id"/>
+                    <h4 class="col-lg-8 col-md-8 col-sm-12 text-left">@subject.NameSubject</h4>
+                    
+                    <input type="submit" value="Inscribirse"/>
+
+                </div> 
+            </form>
+            }
+        }
+    }
+</div>

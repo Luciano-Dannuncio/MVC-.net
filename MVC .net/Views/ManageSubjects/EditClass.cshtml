@@ -1,0 +1,54 @@
+﻿@{
+    @model int
+    ViewData["Title"] = "EditClass";
+}
+
+<div class="container ">
+    <div class="card col-lg-8 col-lg-offset-2 col-sm-12  ">
+        <div class="card-header">
+            <div class="row">
+                <h2>Catedra: @ViewBag.NameSubject</h2>
+            </div>
+            <div class="row">
+                <h4>Edicion Comision : @ViewBag.Classroom</h4>
+            </div>
+        </div>
+        
+        <div class="danger" name="wrongenter" id="wrongenter">
+            @ViewBag.Error
+        </div>
+        <br />
+        
+        <form action="@Url.Content("~/ManageSubjects/UpdateClass")" method="post" class="col-lg-6 col-lg-offset-3 col-md-6 col-md-offset-3 col-sm-12" name="LogInForm" id="LogInForm">
+            <input name="subjectid" id="subjectid" type="hidden" value="@Model" />
+            <input name="classid" id="classid" type="hidden" value="@ViewBag.ClassId" />
+            
+            <div class="row text-center align-content-center">
+                <label for="classroom">Nro de comision</label>
+                <input type="number" name="classroom" id="classroom" value="@ViewBag.Classroom" />
+            </div>
+            
+            <div class="row text-center align-content-center">
+                <label for="maxstudent">Cupo Maximo de Estudiantes</label>
+                <input type="number" name="maxstudent" id="maxstudent" value="@ViewBag.MaxStudent"/>
+            </div>
+            
+            <div class="row text-center align-content-center">
+                <p>Profesor Actual: @ViewBag.TeacherName</p>
+                <label for="teacherdni">Dni Profesor</label>
+                <input type="tel" name="teacherdni" id="teacherdni" value="@ViewBag.TeacherDni" />
+            </div>
+            
+            <div class="row text-center">
+                <input class="form-check-input" type="checkbox" value="true" name="isactive" id="isactive" Value="@ViewBag.IsActive">
+                <label class="form-check-label" for="isactive">
+                    Activar/Desactivar Comision
+                </label>
+            </div>
+
+            <div class="row text-center align-content-center">
+                <input type="submit" class="btn btn-success" value="Editar" />
+            </div>
+        </form>
+    </div>
+</div>

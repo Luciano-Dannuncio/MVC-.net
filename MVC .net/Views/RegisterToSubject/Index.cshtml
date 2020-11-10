@@ -1,0 +1,55 @@
+﻿@{
+    @model List<ClassModel>  
+
+    ViewData["Title"] = "index";
+}
+
+<h1 class="text-center">Gestionar Materias</h1>
+
+<br />
+<div class="Success" name="AddSubjectSuccess" id="AddSubjectSuccess">
+    <span>@ViewBag.Success</span>
+</div>
+<br />
+<div class="danger" name="wrongenter" id="wrongenter">
+    <p>@ViewBag.Warning</p>
+</div>
+<br />
+<div class="danger" name="wrongenter" id="wrongenter">
+    <bold>@ViewBag.Error</bold>
+</div>
+<br />
+<div class="success">
+    @{ if (Model.Count != 0)
+            //agregar mensaje si no hay comisiones factibles de inscribirse
+        {
+            foreach (ClassModel Class in Model)
+            {
+                <div class="card row">
+                    <form action="@Url.Content("~/RegisterToSubject/Inscription")" method="post" class="row col-lg-10 col-lg-offset-2">
+                        <div class="row col-lg-8 col-md-8 col-sm-12">
+                            <p class="text-left">Comisión: @Class.ClassroomClasses</p>
+                            <p class="text-right">Profesor :@Class.NameTeacher</p>
+                        </div>
+                        <input type="hidden" name="classid" id="classid" value="@Class.IdClasses" />
+                        <input type="hidden" name="subjectid" id="subjectid" value="@Class.IdSubjects" />
+                        <div class="row col-lg-4 col-md-4 col-sm-12">
+                            @{ if (Class.MaxCapacityClasses == false)
+                                {
+                                    <p class="text-left">Cupo máximo: @Class.MaxStudentClasses</p>
+                                    <input type="submit" class="float-right btn-sm btn-success text-center" value="Inscribir" />
+                                }
+                                else
+                                {
+                                    <p class="Danger text-left">Cupo Máximo: Completo</p>
+                                    <input type="submit" disabled class="float-right btn-sm btn-Danger text-center" value="Inscribir" />
+                                }
+
+                            }
+                        </div>
+                    </form>
+                </div>
+            }
+        }
+    }
+</div>

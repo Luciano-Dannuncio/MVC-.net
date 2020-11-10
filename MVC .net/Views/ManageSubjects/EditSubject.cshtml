@@ -1,0 +1,40 @@
+﻿
+@{
+    ViewData["Title"] = "EditSubject";
+}
+
+<div class="container ">
+    <div class="card col-lg-8 col-lg-offset-2 col-sm-12  ">
+        <div class="danger" name="wrongenter" id="wrongenter">
+            @ViewBag.Error
+        </div>
+        <br />
+        <form action="@Url.Content("~/ManageSubjects/UpdateSubject")" method="post" class="col-lg-6 col-lg-offset-3 col-md-6 col-md-offset-3 col-sm-12">
+            <input type="hidden" name="subjectid" id="subjectid" value="@ViewBag.SubjectId" />
+            
+            <div class="row text-center align-content-center">
+                <label for="namesubject">Nombre de la Materia</label>
+                <input type="text" name="namesubject" id="namesubject" value="@ViewBag.NameSubject" />
+            </div>
+
+            <div class="row text-center align-content-center">
+                <label for="headteacherdni">Jefa/e de catedra</label>
+                <p>Actual: @ViewBag.HeadTeacherName</p>
+                <input type="hidden" name="headteachername" id="headteachername" value="@ViewBag.HeadTeacherName" />
+                <input type="number" value="@ViewBag.HeadTeacherDni" name="headteacherdni" id="headteacherdni" />
+            </div>
+
+            <div class="row text-center">
+                <input class="form-check-input" type="checkbox" value="@ViewBag.IsActive" name="isactive" id="isactive">
+                <label class="form-check-label" for="isactive">
+                    Activar/Desactivar Materia
+                </label>
+            </div>
+
+            <div class="row text-center align-content-center">
+                <input type="submit" class="btn btn-success" value="Modificar" />
+            </div>
+
+        </form>
+    </div>
+</div>

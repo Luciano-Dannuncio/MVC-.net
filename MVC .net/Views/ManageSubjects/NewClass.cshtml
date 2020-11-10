@@ -1,0 +1,37 @@
+﻿@{
+    @model int
+    ViewData["Title"] = "NewClass";
+}
+
+<div class="container ">
+    <div class="card col-lg-8 col-lg-offset-2 col-sm-12  ">
+        <div class="danger" name="wrongenter" id="wrongenter">
+            @ViewBag.Error
+        </div>
+        <br />
+        <form action="@Url.Content("~/ManageSubjects/CreateClass")" method="post" class="col-lg-6 col-lg-offset-3 col-md-6 col-md-offset-3 col-sm-12" name="LogInForm" id="LogInForm">
+            <input name="subjectid" id="subjectid" type="hidden" value="@Model" />
+            <div class="row text-center align-content-center">
+                <label for="classroom">Nro de comision</label>
+                <input type="text" name="classroom" id="classroom" />
+            </div>
+            <div class="row text-center align-content-center">
+                <label for="maxstudent">Cupo Maximo de Estudiantes</label>
+                <input type="number" name="maxstudent" id="maxstudent" />
+            </div>
+            <div class="row text-center align-content-center">
+                <label for="teacherdni">Dni Profesor</label>
+                <input type="tel" name="teacherdni" id="teacherdni" />
+            </div>
+            <div class="row text-center">
+                <input class="form-check-input" type="checkbox" value="true" name="isactive" id="isactive">
+                <label class="form-check-label" for="isactive">
+                    Activar Materia
+                </label>
+            </div>
+            <div class="row text-center align-content-center">
+                <input type="submit" class="btn btn-success" value="Crear" />
+            </div>
+        </form>
+    </div>
+</div>
