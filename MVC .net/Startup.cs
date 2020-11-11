@@ -12,11 +12,13 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using MVCnetcore.Filters;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
-using Microsoft.AspNetCore.Identity;
+
 
 using MVCnetcore.Models.DB;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace MVCnetcore
 {
@@ -32,22 +34,38 @@ namespace MVCnetcore
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+
             services.AddControllersWithViews();
-           // services.AddScoped<VerifySession>();
-            services.AddSession(options => {
-                options.IdleTimeout = TimeSpan.FromMinutes(1);//You can set Time   
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(config =>
+            {
+                config.Cookie.Name = "Cookie.Basics";
+                config.LoginPath = "/LogIn";
             });
-            services.AddMvc(config => {
-                var policy = new AuthorizationPolicyBuilder()
-                                .RequireAuthenticatedUser()
-                                .Build();
-                config.Filters.Add(new AuthorizeFilter(policy));
-            });
+
+
+            // services.AddScoped<VerifySession>();
+            /* services.AddSession(options => {
+                 options.IdleTimeout = TimeSpan.FromMinutes(1);//You can set Time   
+             });
+             services.AddMvc(config => {
+                 var policy = new AuthorizationPolicyBuilder()
+                                 .RequireAuthenticatedUser()
+                                 .Build();
+                 config.Filters.Add(new AuthorizeFilter(policy));
+         
+            
+            services.AddDefaultIdentity<IdentityUser, IdentityRole>(
+                options => options.SignIn.RequireConfirmedAccount = false)
+             
+             .AddDefaultTokenProviders()
+             .AddEntityFrameworkStores<AlkemyChallengeCDBContext>();
+              */
+
+            //.AddUserStore<Models.DB.Users>()
+            //.AddRoleStore<Models.DB.Roles>();
+            services.AddSession();
             services.AddMvc();
-            services.AddIdentity<IdentityUser, IdentityRole>()
-            .AddUserStore<Models.DB.Users>()
-            .AddSignInManager()
-            .AddRoleStore<Models.DB.Roles>();
+            services.AddRazorPages();
             
         }
 
@@ -71,12 +89,8 @@ namespace MVCnetcore
 
             app.UseAuthentication();
             app.UseAuthorization();
-
             app.UseSession();
-           
-            
-            app.UseHostFiltering();
-
+    
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(

@@ -5,30 +5,24 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Mvc;
 using MVCnetcore.Models;
-using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Http;
 using System.Security.Cryptography;
 using System.Text;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.EntityFrameworkCore.Design;
+using Microsoft.EntityFrameworkCore.SqlServer;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
+
+
 
 namespace MVCnetcore.Controllers
 {
     [AllowAnonymous]
     public class LogInController : Controller
     {
-        private readonly UserManager<IdentityUser> userManager;
-        private readonly SignInManager<IdentityUser> signInManager;
-
-
-        /*public LogInController() { }
-        public LogInController(UserManager<IdentityUser> userManager,
-               SignInManager<IdentityUser> signInManager)
-        {
-            this.userManager = userManager;
-            this.signInManager = signInManager;
-        }
-        */
+    
         public IActionResult Index()
         {
             if (TempData["Success"] != null) { ViewBag.Success = TempData["Success"]; }
@@ -69,7 +63,9 @@ namespace MVCnetcore.Controllers
                              {
                                  Id = d.IdUsers,
                                  Email = d.EmailUsers,
-                                 Password = d.PasswordUsers
+                                 Name = d.NameUsers,
+                                 Password = d.PasswordUsers,
+                                 IdRoles = d.IdRoles
                              }).FirstOrDefault();
                     
                     if (oUser == null)
@@ -77,10 +73,18 @@ namespace MVCnetcore.Controllers
                         ViewBag.Error = "Usuario o Contraseña Incorrectas";
                         return View();
                     }
-                   var user = new IdentityUser { Id = oUser.Id.ToString() , UserName = email };
+                    
+                    var claims = new List<Claim>
+                    {
+                        new Claim(ClaimTypes.Name, oUser.Name ),
+                        new Claim(ClaimTypes.Email, oUser.Email)
+                      
+                    };
 
-                    await signInManager.SignInAsync(user, isPersistent: false);
-                                   
+                    var claimsIdentity = new ClaimsIdentity(claims, "./LogIn");
+
+                    await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,new ClaimsPrincipal(claimsIdentity));
+                   
                 }
                 return RedirectToAction("Index", "Home");
             }
@@ -90,6 +94,8 @@ namespace MVCnetcore.Controllers
                 return View();
             }            
         }
+
+        //AUTENTICACION FUNCIONA FALTA APLICAR ROLES Y A LO VISUAL
 
         [HttpPost]
         public IActionResult CreateUser(string email, string nameuser,string password, string password2)

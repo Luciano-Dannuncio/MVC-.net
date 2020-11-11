@@ -7,10 +7,12 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using MVCnetcore.Models;
 using MVCnetcore.Filters;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 
 namespace MVCnetcore.Controllers
 {
-    [ServiceFilter(typeof(VerifySession))]
+    [Authorize]
     public class HomeController : Controller
     {
             

@@ -7,6 +7,7 @@ using MVCnetcore.Models;
 using MVCnetcore.Filters;
 using Microsoft.AspNetCore.Session;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 
 namespace MVCnetcore.Controllers

@@ -105,7 +105,7 @@ namespace MVCnetcore.Models.DB
 
                 entity.Property(e => e.EmailUsers)
                     .HasColumnName("Email_Users")
-                    .HasMaxLength(50);
+                    .HasMaxLength(100);
 
                 entity.Property(e => e.NameUsers)
                     .HasColumnName("Name_Users")
