@@ -38,7 +38,7 @@ namespace MVCnetcore.Controllers
         {     //ENVIO DEL FORMULARIO DE LA NUEVA MATERIA, CORROBORACIÓN y CREACIÓN DE LA MISMA.
             try
             {
-                using (var db = new Models.DB.AlkemyChallengeCDBContext())
+                using (var db = new Models.DB.ChallengeCDBContext())
                 {
                     var newsubject = (from d in db.Subjects
                                       where d.NameSubjects == namesubject
@@ -185,7 +185,7 @@ namespace MVCnetcore.Controllers
         {
             try
             {
-                using (var db = new Models.DB.AlkemyChallengeCDBContext())
+                using (var db = new Models.DB.ChallengeCDBContext())
                 {
                     Models.DB.Subjects updatesubject = (from d in db.Subjects
                                                   where d.IdSubjects == subjectid
@@ -235,7 +235,7 @@ namespace MVCnetcore.Controllers
         {
             try
             {
-                using (var db = new Models.DB.AlkemyChallengeCDBContext())
+                using (var db = new Models.DB.ChallengeCDBContext())
                 {
                     var SubjectToDelete = (from d in db.Subjects
                                            where d.IdSubjects == subjectid
@@ -306,7 +306,7 @@ namespace MVCnetcore.Controllers
         {
             try
             {
-                using (var db = new Models.DB.AlkemyChallengeCDBContext())
+                using (var db = new Models.DB.ChallengeCDBContext())
                 {
                     Models.DB.Classes updateclass = (from d in db.Classes
                                                      where d.IdClasses == classid
@@ -366,7 +366,7 @@ namespace MVCnetcore.Controllers
         {     //ENVIO DEL FORMULARIO DE LA NUEVA COMISION, CORROBORACIÓN y CREACIÓN DE LA MISMA.
             try
             {
-                using (var db = new Models.DB.AlkemyChallengeCDBContext())
+                using (var db = new Models.DB.ChallengeCDBContext())
                 {
                     var newclass = (from d in db.Classes
                                       where d.ClassroomClasses == classroom
@@ -422,7 +422,7 @@ namespace MVCnetcore.Controllers
         {
             try
             {
-                using (var db = new Models.DB.AlkemyChallengeCDBContext())
+                using (var db = new Models.DB.ChallengeCDBContext())
                 {
                     var ClassToDelete = (from d in db.Classes
                                            where d.IdClasses == classid
@@ -455,7 +455,7 @@ namespace MVCnetcore.Controllers
             ClassModel ClassData = new ClassModel();
             try
             {
-                using (var db = new Models.DB.AlkemyChallengeCDBContext())
+                using (var db = new Models.DB.ChallengeCDBContext())
                 {
                     ClassData = (from d in db.Classes
                                  where d.IdSubjects == subjectid
@@ -498,7 +498,7 @@ namespace MVCnetcore.Controllers
             List<ClassModel> ClassesList = new List<ClassModel>();
             try
             {
-                using (var db = new Models.DB.AlkemyChallengeCDBContext())
+                using (var db = new Models.DB.ChallengeCDBContext())
                 {
                     ClassesList = (from d in db.Classes
                                    where d.IdSubjects == IdSubject
@@ -533,7 +533,7 @@ namespace MVCnetcore.Controllers
             List<SubjectModel> SubjectsList = new List<SubjectModel>();
             try
             {
-                using (var db = new Models.DB.AlkemyChallengeCDBContext())
+                using (var db = new Models.DB.ChallengeCDBContext())
                 {
                     SubjectsList = (from d in db.Subjects
                                     where d.NameSubjects != ""
@@ -561,7 +561,7 @@ namespace MVCnetcore.Controllers
             SubjectModel subjectData = new SubjectModel();
             try
             {
-                using (var db = new Models.DB.AlkemyChallengeCDBContext())
+                using (var db = new Models.DB.ChallengeCDBContext())
                 {
                     subjectData = (from d in db.Subjects
                                    where d.IdSubjects == subjectid
@@ -600,7 +600,7 @@ namespace MVCnetcore.Controllers
             try
             {
 
-                using (var db = new Models.DB.AlkemyChallengeCDBContext())
+                using (var db = new Models.DB.ChallengeCDBContext())
                 {
                     headTeacher = (from d in db.Teachers
                                    where d.IdTeachers == SubjectHeadTeacherId

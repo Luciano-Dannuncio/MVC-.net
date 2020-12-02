@@ -24,7 +24,7 @@ namespace MVCnetcore.Controllers
 
             try
             {
-                using (var db = new Models.DB.AlkemyChallengeCDBContext())
+                using (var db = new Models.DB.ChallengeCDBContext())
                 {
                     var user = (from d in db.Users
                                   where d.EmailUsers == usermail

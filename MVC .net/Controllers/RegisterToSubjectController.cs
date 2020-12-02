@@ -35,7 +35,7 @@ namespace MVCnetcore.Controllers
 
             try
             {
-                using (var db = new Models.DB.AlkemyChallengeCDBContext())
+                using (var db = new Models.DB.ChallengeCDBContext())
                 {
                     var userid = (from d in db.Users
                                   where d.EmailUsers == usermail
@@ -53,7 +53,7 @@ namespace MVCnetcore.Controllers
 
                 }
 
-                using (var db = new Models.DB.AlkemyChallengeCDBContext())
+                using (var db = new Models.DB.ChallengeCDBContext())
                 {
                         
                          var inscriptionposible = (from c in db.Classes
@@ -128,7 +128,7 @@ namespace MVCnetcore.Controllers
             List<ClassModel> ClassesList = new List<ClassModel>();
             try
             {
-                using (var db = new Models.DB.AlkemyChallengeCDBContext())
+                using (var db = new Models.DB.ChallengeCDBContext())
                 {
                     ClassesList = (from d in db.Classes
                                    where d.IdSubjects == IdSubject
@@ -162,7 +162,7 @@ namespace MVCnetcore.Controllers
 
             try
             {
-                using (var db = new Models.DB.AlkemyChallengeCDBContext())
+                using (var db = new Models.DB.ChallengeCDBContext())
                 {
                     List<Models.DB.Classes> updateposible = (from d in db.Classes
                                                              where d.IdSubjects == subjectid

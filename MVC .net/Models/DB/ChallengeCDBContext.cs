@@ -4,13 +4,13 @@ using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace MVCnetcore.Models.DB
 {
-    public partial class AlkemyChallengeCDBContext : DbContext
+    public partial class ChallengeCDBContext : DbContext
     {
-        public AlkemyChallengeCDBContext()
+        public ChallengeCDBContext()
         {
         }
 
-        public AlkemyChallengeCDBContext(DbContextOptions<AlkemyChallengeCDBContext> options)
+        public ChallengeCDBContext(DbContextOptions<ChallengeCDBContext> options)
             : base(options)
         {
         }
@@ -31,7 +31,7 @@ namespace MVCnetcore.Models.DB
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-                optionsBuilder.UseSqlServer("Server=(localdb)\\MSSQLLocalDB; Database=AlkemyChallengeC#DB;Trusted_Connection=True;");
+                optionsBuilder.UseSqlServer("Server=(localdb)\\MSSQLLocalDB; Database=ChallengeC#DB;Trusted_Connection=True;");
             }
         }
 

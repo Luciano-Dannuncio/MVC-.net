@@ -37,7 +37,7 @@ namespace MVCnetcore.Controllers
             {
                 Models.DB.Teachers newteacher = new Models.DB.Teachers();
                
-                using (var db = new Models.DB.AlkemyChallengeCDBContext()) 
+                using (var db = new Models.DB.ChallengeCDBContext()) 
                 {
                    var isteacher = (from d in db.Teachers
                                   where d.DniTeachers == teacherdni
@@ -91,7 +91,7 @@ namespace MVCnetcore.Controllers
             {
                 Models.DB.Teachers teacherupdate = new Models.DB.Teachers();
                 
-                using (var db = new Models.DB.AlkemyChallengeCDBContext())
+                using (var db = new Models.DB.ChallengeCDBContext())
                 {
                     teacherupdate = (from d in db.Teachers
                                      where d.IdTeachers == teacherid
@@ -129,7 +129,7 @@ namespace MVCnetcore.Controllers
         {
             try
             {
-                using (var db = new Models.DB.AlkemyChallengeCDBContext()) 
+                using (var db = new Models.DB.ChallengeCDBContext()) 
                 {
                     var TeacherToDelete = (from d in db.Teachers
                                            where d.IdTeachers == teacherid
@@ -161,7 +161,7 @@ namespace MVCnetcore.Controllers
             TeacherModel teacherdata = new TeacherModel();
             try
             {
-                using (var db = new Models.DB.AlkemyChallengeCDBContext()) 
+                using (var db = new Models.DB.ChallengeCDBContext()) 
                 {
                     teacherdata = (from d in db.Teachers
                                    where d.IdTeachers == teacherid
@@ -189,7 +189,7 @@ namespace MVCnetcore.Controllers
             List<TeacherModel> TeachersList = new List<TeacherModel>();
             try
             {
-                using (var db = new Models.DB.AlkemyChallengeCDBContext())
+                using (var db = new Models.DB.ChallengeCDBContext())
                 {
                     TeachersList = (from d in db.Teachers
                                     where d.NameTeachers != ""

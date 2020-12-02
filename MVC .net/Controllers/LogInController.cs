@@ -57,7 +57,7 @@ namespace MVCnetcore.Controllers
             try
             {
                 UserLogInModel oUser = new UserLogInModel();
-                using (var db = new Models.DB.AlkemyChallengeCDBContext())
+                using (var db = new Models.DB.ChallengeCDBContext())
                 {
                     oUser = (from d in db.Users
                              where d.EmailUsers == email
@@ -118,7 +118,7 @@ namespace MVCnetcore.Controllers
                     UserLogInModel oUser = new UserLogInModel();
                     string encpass = EncryptPass(password);
                     
-                    using (var db = new Models.DB.AlkemyChallengeCDBContext())
+                    using (var db = new Models.DB.ChallengeCDBContext())
                     {
                         var userposible = (from d in db.Users
                                            where d.EmailUsers == email

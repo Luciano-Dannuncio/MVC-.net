@@ -40,7 +40,7 @@ namespace MVCnetcore.Controllers
                 var claimmail = User.Claims.ToArray();
                 string usermail = claimmail[0].Value;
 
-                using (var db = new Models.DB.AlkemyChallengeCDBContext())
+                using (var db = new Models.DB.ChallengeCDBContext())
                 {
                     var userid = (from d in db.Users
                                   where d.EmailUsers == usermail
@@ -90,7 +90,7 @@ namespace MVCnetcore.Controllers
                 string usermail = claimmail[0].Value;
                 
 
-                using (var db = new Models.DB.AlkemyChallengeCDBContext())
+                using (var db = new Models.DB.ChallengeCDBContext())
                 {
                     var userid = (from d in db.Users
                                   where d.EmailUsers == usermail
