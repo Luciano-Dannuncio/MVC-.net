@@ -7,6 +7,12 @@
 
   <ItemGroup>
     <None Include="..\.editorconfig" Link=".editorconfig" />
+    <None Include="wwwroot\Images\Universityadmin.jpg" />
+    <None Include="wwwroot\Images\Universitydoors.jpg" />
+    <None Include="wwwroot\Images\Universityimg.jpg" />
+    <None Include="wwwroot\Images\Universitystudents.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
   <ItemGroup>

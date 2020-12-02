@@ -1,42 +1,64 @@
 ﻿@{
     ViewData["Title"] = "ModifyTeacher";
-}
 
-<div class="container ">
-    <div class="card col-lg-8 col-lg-offset-2 col-sm-12  ">
-        <div class="danger" name="wrongenter" id="wrongenter">
-            @ViewBag.Error
-        </div>
-        <br />
-        <form action="@Url.Content("~/ManageTeachers/UpdateTeacher")" method="post" class="col-lg-6 col-lg-offset-3 col-md-6 col-md-offset-3 col-sm-12">
+}
+    <div class="backimageAdmin rounded ">
+        <form action="@Url.Content("~/ManageTeachers/UpdateTeacher")" method="post" class="align-content-center card border-dark border-3 bg-transparent">
+            <br />
+            <div class="form-group col-lg-6 col-md-6 col-sm-10 offset-lg-3 offset-md-3 offset-sm-1 text-center">
+                <h3 class="text-light">Modificar Datos Profesor</h3>
+                <p class="text-light">Modificá o corregí los datos del profesor en el sistema.</p>
+            </div>
+            <br />
+            @{
+                if (ViewBag.Success != "" && ViewBag.Success != null)
+                {
+                    <div class="SuccessMessage text-success font-weight-bold text-center bg-dark" name="AddSubjectSuccess" id="AddSubjectSuccess">
+                        <p>@ViewBag.Success</p>
+                    </div>
+                }
+                if (ViewBag.Warning != "" && ViewBag.Warning != null)
+                {
+                    <div class="danger text-danger font-weight-light text-center bg-dark" name="warning" id="warning">
+                        <p>@ViewBag.Warning</p>
+                    </div>
+                }
+                if (ViewBag.Error != "" && ViewBag.Error != null)
+                {
+                    <div class="danger text-danger font-weight-bold text-center bg-dark" name="error" id="error">
+                        <p>@ViewBag.Error</p>
+                    </div>
+                }
+            }
+            <br />
+
             <input type="hidden" name="teacherid" id="teacherid" value="@ViewBag.TeacherId" />
 
-            <div class="row text-center align-content-center">
-                <label for="teachername">Nombre </label>
-                <input type="text" name="teachername" id="teachername" value="@ViewBag.TeacherName" />
+            <div class="form-group col-lg-6 col-md-6 col-sm-10 offset-lg-3 offset-md-3 offset-sm-1 text-center">
+                <div class="bg-dark rounded largeopacity">
+                    <label class="font-weight-bold" for="teachername">Nombre </label>
+                </div>
+                <input class="form-control" type="text" name="teachername" id="teachername" value="@ViewBag.TeacherName" />
             </div>
 
-            <div class="row text-center align-content-center">
-                <label for="teacherlastname">Apellido </label>
-                <input type="text" name="teacherlastname" id="teacherlastname" value="@ViewBag.TeacherLastName" />
+            <div class="form-group col-lg-6 col-md-6 col-sm-10 offset-lg-3 offset-md-3 offset-sm-1 text-center">
+                <div class="bg-dark rounded largeopacity">
+                    <label for="teacherlastname">Apellido </label>
+                </div>
+                <input class="form-control" type="text" name="teacherlastname" id="teacherlastname" value="@ViewBag.TeacherLastName" />
             </div>
 
-            <div class="row text-center align-content-center">
-                <label for="headteacherdni">Dni</label>
-                <input type="number" value="@ViewBag.TeacherDni" name="teacherdni" id="teacherdni" />
+            <div class="form-group col-lg-6 col-md-6 col-sm-10 offset-lg-3 offset-md-3 offset-sm-1 text-center">
+                <div class="bg-dark rounded largeopacity">
+                    <label for="headteacherdni">Dni</label>
+                </div>
+                <input class="form-control" value="@ViewBag.TeacherDni" type="tel" minlength="7" maxlength="8" oninvalid="this.setCustomValidity('El DNI debe contener números y una longitud de entre 7 y 8 dígitos')" name="teacherdni" id="teacherdni" />
             </div>
 
-            <div class="row text-center">
-                <input class="form-check-input" type="checkbox" value="@ViewBag.IsActive" name="isactive" id="isactive">
-                <label class="form-check-label" for="isactive">
-                    Activar/Desactivar Profesor
-                </label>
-            </div>
-
-            <div class="row text-center align-content-center">
-                <input type="submit" class="btn btn-success" value="Modificar" />
+            <div class="form-group col-lg-4 col-md-4 col-sm-8 offset-lg-4 offset-md-4 offset-sm-2 text-center align-content-center">
+                <input type="submit" class="btn btn-dark text-light" value="Guardar Cambios" />
             </div>
 
         </form>
-    </div>
-</div>
+    
+     </div>

@@ -1,40 +1,59 @@
-﻿
-@{
+﻿@{
     ViewData["Title"] = "EditSubject";
+   
 }
 
-<div class="container ">
-    <div class="card col-lg-8 col-lg-offset-2 col-sm-12  ">
-        <div class="danger" name="wrongenter" id="wrongenter">
-            @ViewBag.Error
-        </div>
-        <br />
-        <form action="@Url.Content("~/ManageSubjects/UpdateSubject")" method="post" class="col-lg-6 col-lg-offset-3 col-md-6 col-md-offset-3 col-sm-12">
+    <div class="backimageAdmin rounded">
+        <form action="@Url.Content("~/ManageSubjects/UpdateSubject")" method="post" class="align-content-center card border-dark border-3 bg-transparent">
+            <br />
+            <div class="form-group col-lg-6 col-md-6 col-sm-10 offset-lg-3 offset-md-3 offset-sm-1 text-center">
+                <h3 class="text-light">Edición de cátedra</h3>
+            </div>
+            <br />
+            @{
+                if (ViewBag.Success != "" && ViewBag.Success != null)
+                {
+                    <div class="SuccessMessage text-success font-weight-bold text-center bg-dark" name="AddSubjectSuccess" id="AddSubjectSuccess">
+                        <p>@ViewBag.Success</p>
+                    </div>
+                }
+                if (ViewBag.Warning != "" && ViewBag.Warning != null)
+                {
+                    <div class="danger text-danger font-weight-light text-center bg-dark" name="warning" id="warning">
+                        <p>@ViewBag.Warning</p>
+                    </div>
+                }
+                if (ViewBag.Error != "" && ViewBag.Error != null)
+                {
+                    <div class="danger text-danger font-weight-bold text-center bg-dark" name="error" id="error">
+                        <p>@ViewBag.Error</p>
+                    </div>
+                }
+            }
+            <br />
+
             <input type="hidden" name="subjectid" id="subjectid" value="@ViewBag.SubjectId" />
-            
-            <div class="row text-center align-content-center">
-                <label for="namesubject">Nombre de la Materia</label>
-                <input type="text" name="namesubject" id="namesubject" value="@ViewBag.NameSubject" />
+            <input type="hidden" name="headteachername" id="headteachername" value="@ViewBag.HeadTeacherName" />
+
+            <div class="form-group col-lg-6 col-md-6 col-sm-10 offset-lg-3 offset-md-3 offset-sm-1 text-center">
+                <div class="bg-dark rounded largeopacity">
+                    <label for="namesubject">Nombre de la Materia</label>
+                </div>
+                <input class="form-control" type="text" name="namesubject" id="namesubject" value="@ViewBag.NameSubject" />
             </div>
 
-            <div class="row text-center align-content-center">
-                <label for="headteacherdni">Jefa/e de catedra</label>
-                <p>Actual: @ViewBag.HeadTeacherName</p>
-                <input type="hidden" name="headteachername" id="headteachername" value="@ViewBag.HeadTeacherName" />
-                <input type="number" value="@ViewBag.HeadTeacherDni" name="headteacherdni" id="headteacherdni" />
+            <div class="form-group col-lg-6 col-md-6 col-sm-10 offset-lg-3 offset-md-3 offset-sm-1 text-center">
+                <div class="bg-dark rounded largeopacity">
+                    <p>Jefa/e de cátedra actual: @ViewBag.HeadTeacherName</p>
+                    <label for="headteacherdni">Dni</label>
+                </div>
+                <input class="form-control" type="tel" minlength="7" maxlength="8" oninvalid="this.setCustomValidity('El DNI debe contener números y una longitud de entre 7 y 8 dígitos')" value="@ViewBag.HeadTeacherDni" name="headteacherdni" id="headteacherdni" />
             </div>
 
-            <div class="row text-center">
-                <input class="form-check-input" type="checkbox" value="@ViewBag.IsActive" name="isactive" id="isactive">
-                <label class="form-check-label" for="isactive">
-                    Activar/Desactivar Materia
-                </label>
-            </div>
-
-            <div class="row text-center align-content-center">
-                <input type="submit" class="btn btn-success" value="Modificar" />
+            <div class="form-group col-lg-4 col-md-4 col-sm-8 offset-lg-4 offset-md-4 offset-sm-2 text-center align-content-center">
+                <input type="submit" class="btn btn-dark text-light" value="Guardar Cambios" />
             </div>
 
         </form>
     </div>
-</div>
+

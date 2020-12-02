@@ -13,6 +13,7 @@ namespace MVCnetcore.Models
         public bool isactive { get; set; }
         public int HeadTeacherDni { get; set; } 
         public string HeadTeacherName { get; set; }
+        public bool IsInscript { get; set; }
 
     }
 }

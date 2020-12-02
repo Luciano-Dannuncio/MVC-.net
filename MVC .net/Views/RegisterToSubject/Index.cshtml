@@ -2,54 +2,76 @@
     @model List<ClassModel>  
 
     ViewData["Title"] = "index";
+    
 }
+    <div class="backimageStudent rounded">
+        <br /><br />
+        <div class="bg-dark largeopacity">
+            <h2 class="text-center text-light">Gestionar Materias</h2>
+        </div>
+        <br />
+        <div class="bg-dark largeopacity">
+            <p class=" text-center text-light font-weight-bold">Crea,modifica o elimina materias y sus respectivas comisiones.</p>
+        </div>
+        <br />
+    </div>
+     <br />
+     <div class="container-fluid bg-secondary largeopacity">
 
-<h1 class="text-center">Gestionar Materias</h1>
+         <div class="SuccessMessage text-success font-weight-bold text-center bg-dark rounded largeopacity" name="AddSubjectSuccess" id="AddSubjectSuccess">
+             <p>@ViewBag.Success</p>
+         </div>
 
-<br />
-<div class="Success" name="AddSubjectSuccess" id="AddSubjectSuccess">
-    <span>@ViewBag.Success</span>
-</div>
-<br />
-<div class="danger" name="wrongenter" id="wrongenter">
-    <p>@ViewBag.Warning</p>
-</div>
-<br />
-<div class="danger" name="wrongenter" id="wrongenter">
-    <bold>@ViewBag.Error</bold>
-</div>
-<br />
-<div class="success">
-    @{ if (Model.Count != 0)
-            //agregar mensaje si no hay comisiones factibles de inscribirse
-        {
-            foreach (ClassModel Class in Model)
-            {
-                <div class="card row">
-                    <form action="@Url.Content("~/RegisterToSubject/Inscription")" method="post" class="row col-lg-10 col-lg-offset-2">
-                        <div class="row col-lg-8 col-md-8 col-sm-12">
-                            <p class="text-left">Comisión: @Class.ClassroomClasses</p>
-                            <p class="text-right">Profesor :@Class.NameTeacher</p>
-                        </div>
-                        <input type="hidden" name="classid" id="classid" value="@Class.IdClasses" />
-                        <input type="hidden" name="subjectid" id="subjectid" value="@Class.IdSubjects" />
-                        <div class="row col-lg-4 col-md-4 col-sm-12">
-                            @{ if (Class.MaxCapacityClasses == false)
-                                {
-                                    <p class="text-left">Cupo máximo: @Class.MaxStudentClasses</p>
-                                    <input type="submit" class="float-right btn-sm btn-success text-center" value="Inscribir" />
-                                }
-                                else
-                                {
-                                    <p class="Danger text-left">Cupo Máximo: Completo</p>
-                                    <input type="submit" disabled class="float-right btn-sm btn-Danger text-center" value="Inscribir" />
-                                }
+         <div class="danger text-danger font-weight-light text-center bg-dark rounded largeopacity" name="warning" id="warning">
+             <p>@ViewBag.Warning</p>
+         </div>
+         <div class="danger text-danger font-weight-bold text-center bg-dark rounded largeopacity" name="error" id="error">
+             <p>@ViewBag.Error</p>
+         </div>
 
-                            }
-                        </div>
-                    </form>
-                </div>
-            }
-        }
-    }
-</div>
+         @{ if (Model.Count != 0)
+             //agregar mensaje si no hay comisiones factibles de inscribirse
+             {
+                 foreach (ClassModel Class in Model)
+                 {
+                     <br />
+                     <div class="card card-body bg-dark rounded border-dark border-3">
+                         <form action="@Url.Content("~/RegisterToSubject/Inscription")" method="post">
+                             <input type="hidden" name="classid" id="classid" value="@Class.IdClasses" />
+                             <input type="hidden" name="subjectid" id="subjectid" value="@Class.IdSubjects" />
+                             <div class="row">
+                                 <div class="col-lg-3 col-md-3 col-sm-12 bg-transparent text-center">
+                                     <p class="">Comisión: @Class.ClassroomClasses</p>
+                                 </div>
+                                 <div class="col-lg-3 col-md-3 col-sm-12 bg-transparent text-center">
+                                     <p class="">Profesor :@Class.NameTeacher</p>
+                                 </div>
+
+                                 @{ if (Class.MaxCapacityClasses == false)
+                                     {
+                                         <div class="col-lg-3 text-center text-white">
+                                             <p class="">Cupo máximo: @Class.MaxStudentClasses</p>
+                                         </div>
+                                         <div class="col-lg-3 justify-content-center">
+                                             <input type="submit" class="btn btn-primary active text-white" value="Inscribir" />
+                                         </div>
+                                     }
+                                     else
+                                     {
+                                         <div class="col-lg-3 Danger text-left">
+                                             <p class="font-weight-bolder">Cupo Máximo: Completo</p>
+                                         </div>
+                                         <div class="col-lg-3 justify-content-center">
+                                             <input type="submit" disabled class="btn btn-secondary " value="Inscribir" />
+                                         </div>
+                                     }
+                                 }
+                             </div>
+                         </form>
+                     </div>
+                     <br />
+                 }
+             }
+         }
+     </div>
+  

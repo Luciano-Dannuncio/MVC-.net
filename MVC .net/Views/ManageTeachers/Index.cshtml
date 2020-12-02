@@ -2,50 +2,61 @@
     @model List<TeacherModel>
 
     ViewData["Title"] = "Index";
+
 }
+    <div class="backimageAdmin rounded">
+        <br />
+        <h2 class="text-center">Gestionar Profesores</h2>
+        <br />
+        <p class="text-center font-weight-bold">creá, modificá o eliminá profesores.</p>
+        <br />
+       
+    </div>
+    <br />
+    <div class="container-fluid rounded bg-secondary largeopacity">
+        <br />
+        <div class="SuccessMessage text-success font-weight-bold text-center bg-dark rounded largeopacity" name="AddSubjectSuccess" id="AddSubjectSuccess">
+            <h4>@ViewBag.Success</h4>
+        </div>
+   
+        <div class="danger text-danger font-weight-light text-center bg-dark rounded largeopacity" name="warning" id="warning">
+            <h4>@ViewBag.Warning</h4>
+        </div>
 
-<h1 class="text-center">Gestionar Profesores</h1>
-<br />
-<div class="row text-center col-lg-6 col-lg-offset-3 col-md-8 col-md-offset-2 col-sm-12">
-    <a href="./ManageTeachers/NewTeacher">Agregar nuevo docente</a>
-</div>
-<br />
-<div class="Success" name="success" id="success">
-    <span>@ViewBag.Success</span>
-</div>
-<div class="Danger" name="warning" id="warning">
-    <p>@ViewBag.Warning</p>
-</div>
-<br />
-<div class="Danger" name="error" id="error">
-    <bold>@ViewBag.Error</bold>
-</div>
+        <div class="danger text-danger font-weight-bolder text-center bg-dark rounded largeopacity" name="error" id="error">
+            <h4>@ViewBag.Error</h4>
+        </div>
 
-<br />
-<div class="success">
-    @{ if (Model.Count != 0)
-        {
-            foreach (TeacherModel teacher in Model)
-            {
-                <div class="card">
-                    <form method="post" action="@Url.Content("~/ManageTeachers/ModifyTeacher")">
-                        <input type="hidden" name="teacherid" id="teacherid" value="@teacher.Id" />
+        <div class="row text-center col-lg-2 offset-lg-5 col-md-2 offset-md-5 col-sm-12">
+            <a class="btn btn-dark text-light" href="./ManageTeachers/NewTeacher">Agregar docente</a>
+        </div>
+        <br />
+       @{ if (Model.Count != 0)
+           {
+                foreach (TeacherModel teacher in Model)
+                {
+                    <div class="card card-body bg-dark border-dark border-3">
                         <div class="row">
-                            <div class="col-lg-8 col-md-6 float-left">
-                                <p><bold>@teacher.LastName </bold>  @teacher.Name</p>
-                                <p>Dni: @teacher.Dni</p>
-                            </div>
-                            <div class="col-lg-4 col-md-6 col-lg-offset-8 col-md-offset-6 ">
-                                <input class="form-check-input" type="checkbox" value="true" name="isactive" id="isactive" Value="@teacher.Active">
-                                <label class="form-check-label" for="isactive">
-                                    Activar/Desactivar Profesor
-                                </label>
-                                <input type="submit" class="btn-sm btn-success" value="Modificar" />
-                            </div>
+                            <form class="row col-lg-9 col-md-9 col-sm-12" method="post" action="@Url.Content("~/ManageTeachers/ModifyTeacher")">
+                                <div class="col-lg-4 col-md-4 col-sm-6 bg-transparent text-center">
+                                    <p><bold>@teacher.LastName </bold>  @teacher.Name</p>
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-6 bg-transparent text-center">
+                                    <p>Dni: @teacher.Dni</p>
+                                </div>
+                                <div class="col-lg-2 col-md-2 col-sm-6 bg-transparent text-center justify-content-center">
+                                    <input type="submit" class="btn btn-primary active text-light" value="Modificar" />
+                                </div>
+                                <input type="hidden" name="teacherid" id="teacherid" value="@teacher.Id" />
+                            </form>
+                            <form class="col-lg-2 col-md-2 col-sm-6 bg-transparent text-center" method="post" action="@Url.Content("~/ManageTeachers/DeleteTeacher")">
+                                <input type="hidden" name="teacherid" id="teacherid" value="@teacher.Id" />
+                                <input type="submit" class="btn btn-danger active text-light" value="Eliminar" />
+                            </form>
                         </div>
-                    </form>
-                </div>
+                    </div>
+                    <br />                 
+                }
             }
         }
-    }
-</div>
+    </div>

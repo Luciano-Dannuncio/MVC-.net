@@ -1,0 +1,60 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - MVCnetcore</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark border-bottom box-shadow mb-3">
+            <div class="container-fluid">
+
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
+                    <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item">
+                            <a class="nav-link text-white" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" asp-area="" asp-controller="ManageTeachers" asp-action="Index">Gestión de Docentes</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" asp-area="" asp-controller="ManageSubjects" asp-action="Index">Gestión de Cátedras</a>
+                        </li>
+                        
+                    </ul>
+                </div>
+                <div class="nav-item float-right">
+                    <a class="nav-link text-white " asp-area="" asp-controller="LogIn" asp-action="LogOut">Cerrar Sesión </a>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="container-fluid d-flex flex-column min-vh-100">
+        <main role="main" class="pb-3 lightgrey">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer top-margin border-dark border-3 bg-dark text-white font-weight-light align-bottom">
+        <div class="container-fluid">
+            <div class="text-center"> &copy; 2020 - MVCnetcore - <a asp-area="" asp-controller="Home" asp-action="index">Links</a></div>
+            <hr />
+            <h5 class="text-center">Información de contacto</h5>
+            <h6 class="text-sm-center ">Telefono: 1233451</h6>
+            <h6 class="text-sm-center ">Email: ejemplo@correo.com</h6>
+            <br />
+        </div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

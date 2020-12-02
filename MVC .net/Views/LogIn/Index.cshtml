@@ -2,35 +2,55 @@
 @{
     ViewData["Title"] = "LogIn";
 }
-
-<div class="row col-lg-8 col-lg-offset-2 col-sm-12  ">
-    <div class="card">
-        <div class="sucess" name="wrongenter" id="wrongenter">
-            <bold>@ViewBag.Success</bold>
-        </div>
-        <div class="danger" name="wrongenter" id="wrongenter">
-            @ViewBag.Warning
-        </div>
-        <div class="danger" name="wrongenter" id="wrongenter">
-            <bold>@ViewBag.Error</bold>
-        </div>
-        <form action="@Url.Content("~/LogIn")" method="post" class="col-lg-6 col-lg-offset-3 col-md-6 col-md-offset-3 col-sm-12" name="LogInForm" id="LogInForm">
-
-            <div class="row text-center align-content-center">
-                <label for="Email">Email</label>
-                <input type="text" name="email" id="email" />
+    <div class="backimageLogin rounded">
+       
+        <form action="@Url.Content("~/LogIn")" class="align-content-center card border-dark border-3 bg-transparent" method="post" name="LogInForm" id="LogInForm">
+            <br />
+            <div class="form-group col-lg-6 col-md-6 col-sm-10 offset-lg-3 offset-md-3 offset-sm-1 text-center">
+                <h3 class="text-dark">Inicio de Sesión</h3>
+                <br />
+                <p class="text-white bg-dark largeopacity rounded">Ingresá con tu email y contraseña e inscribite a las materias desde cualquier dispositivo.</p>
             </div>
-            <div class="row" text-center align-content-center">
-                <label for="password">Contraseña</label>
-                <input type="password" id="password" name="password" />
+         @{ 
+                if (ViewBag.Success != "" && ViewBag.Success != null) {
+            <div class="SuccessMessage text-success font-weight-bold text-center bg-dark" name="AddSubjectSuccess" id="AddSubjectSuccess">
+                <p>@ViewBag.Success</p>
             </div>
-            <div class="row text-center align-content-center">
-                <input type="submit" class="btn btn-success" value="Ingresar" />
+                }
+                if (ViewBag.Warning != "" && ViewBag.Warning != null) {
+            <div class="danger text-danger font-weight-light text-center bg-dark" name="warning" id="warning">
+                <p>@ViewBag.Warning</p>
             </div>
-        </form>
-        <div class="row text-center align-content-center">
-            <a href="@Url.Content("~/Login/NewUser")">¿No estas registrado?, crea un nuevo usuario</a>
-        </div>
-    </div>    
-</div>
+                }
+                if (ViewBag.Error != "" && ViewBag.Error != null) {
+            <div class="danger text-danger font-weight-bold text-center bg-dark" name="error" id="error">
+                <p>@ViewBag.Error</p>
+            </div>
+                    }
+            }
+            <br />
+            <div class="form-group col-lg-6 col-md-6 col-sm-10 offset-lg-3 offset-md-3 offset-sm-1 text-center">
+                <div class="bg-dark largeopacity rounded">
+                    <label for="Email">Email</label>
+                </div>
+                <input class="form-control text-center" type="email" oninvalid="this.setCustomValidity('Por favor ingresá tu email en un formato válido')" name="email" id="email" placeholder="Email@ejemplo.com" />
+            </div>
+            <div class="form-group col-lg-6 col-md-6 col-sm-10  offset-lg-3 offset-md-3 offset-sm-1 text-center">
+                <div class="bg-dark largeopacity rounded">
+                    <label for="password">Contraseña</label>
+                </div>
+                <input class="form-control text-center" type="password" minlength="6" oninvalid="this.setCustomValidity('La contraseña tiene que contener al menos 6 caracteres')" id="password" name="password" aria-describedby="passwordhelp" placeholder="Ingrese su contraseña" />
+                <small id="passwordhelp" class="helptext form-text text-dark">La contraseña debe contener al menos 6 caracteres.</small>
+            </div>
+            <br />
+            <div class="form-group col-lg-4 col-md-4 col-sm-8 offset-lg-4 offset-md-4 offset-sm-2 text-center align-content-center">
+                <input type="submit" class="btn btn-dark text-light" value="Ingresar" />
+            </div>
+            <hr />
+            <div class="form-group col-lg-6 col-md-6 col-sm-10 offset-lg-3 offset-md-3 offset-sm-1 text-center bg-dark largeopacity rounded">
+                <a href="@Url.Content("~/Login/NewUser")">¿No estás registrado? Creá tu cuenta.</a>
+            </div>
 
+        </form>          
+        
+    </div>

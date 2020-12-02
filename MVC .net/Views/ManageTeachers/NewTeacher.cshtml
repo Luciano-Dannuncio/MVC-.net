@@ -1,41 +1,64 @@
 ﻿@{
     ViewData["Title"] = "NewTeacher";
+    
 }
 
-<div class="container ">
-    <div class="card col-lg-8 col-lg-offset-2 col-sm-12  ">
-        <div class="danger" name="wrongenter" id="wrongenter">
-            @ViewBag.Error
+
+<div class="backimageAdmin rounded ">
+    <form action="@Url.Content("~/ManageTeachers/NewTeacher")" method="post" class="align-content-center card border-dark border-3 bg-transparent">
+        <br />
+        <div class="form-group col-lg-6 col-md-6 col-sm-10 offset-lg-3 offset-md-3 offset-sm-1 text-center">
+            <h3 class="text-light">Nuevo Profesor</h3>
+            <p class="text-light">Ingresá un nuevo profesor al sistema.</p>
         </div>
         <br />
-        <form action="@Url.Content("~/ManageTeachers/NewTeacher")" method="post" class="col-lg-6 col-lg-offset-3 col-md-6 col-md-offset-3 col-sm-12">
-           
-            <div class="row text-center align-content-center">
-                <label for="teachername">Nombre </label>
-                <input type="text" name="teachername" id="teachername"  />
-            </div>
+        @{
+            if (ViewBag.Success != "" && ViewBag.Success != null)
+            {
+                <div class="SuccessMessage text-success font-weight-bold text-center bg-dark" name="AddSubjectSuccess" id="AddSubjectSuccess">
+                    <p>@ViewBag.Success</p>
+                </div>
+            }
+            if (ViewBag.Warning != "" && ViewBag.Warning != null)
+            {
+                <div class="danger text-danger font-weight-light text-center bg-dark" name="warning" id="warning">
+                    <p>@ViewBag.Warning</p>
+                </div>
+            }
+            if (ViewBag.Error != "" && ViewBag.Error != null)
+            {
+                <div class="danger text-danger font-weight-bold text-center bg-dark" name="error" id="error">
+                    <p>@ViewBag.Error</p>
+                </div>
+            }
+        }
+        <br />
 
-            <div class="row text-center align-content-center">
+        <div class="form-group col-lg-6 col-md-6 col-sm-10 offset-lg-3 offset-md-3 offset-sm-1 text-center">
+            <div class="bg-dark rounded largeopacity">
+                <label class="font-weight-bold" for="teachername">Nombre </label>
+            </div>
+            <input class="form-control" type="text" name="teachername" id="teachername" />
+        </div>
+
+        <div class="form-group col-lg-6 col-md-6 col-sm-10 offset-lg-3 offset-md-3 offset-sm-1 text-center">
+            <div class="bg-dark rounded largeopacity">
                 <label for="teacherlastname">Apellido </label>
-                <input type="text" name="teacherlastname" id="teacherlastname"/>
             </div>
+            <input class="form-control" type="text" name="teacherlastname" id="teacherlastname" />
+        </div>
 
-            <div class="row text-center align-content-center">
+        <div class="form-group col-lg-6 col-md-6 col-sm-10 offset-lg-3 offset-md-3 offset-sm-1 text-center">
+            <div class="bg-dark rounded largeopacity">
                 <label for="headteacherdni">Dni</label>
-                <input type="number" name="teacherdni" id="teacherdni" />
             </div>
+            <input class="form-control" type="tel" minlength="7" maxlength="8" oninvalid="this.setCustomValidity('El DNI debe contener números y una longitud de entre 7 y 8 dígitos')" value="@ViewBag.TeacherDni" name="teacherdni" id="teacherdni" />
+        </div>
 
-            <div class="row text-center">
-                <input class="form-check-input" type="checkbox" name="isactive" id="isactive">
-                <label class="form-check-label" for="isactive">
-                    Activar/Desactivar Profesor
-                </label>
-            </div>
+        <div class="form-group col-lg-4 col-md-4 col-sm-8 offset-lg-4 offset-md-4 offset-sm-2 text-center align-content-center">
+            <input type="submit" class="btn btn-dark text-light" value="Crear Docente" />
+        </div>
 
-            <div class="row text-center align-content-center">
-                <input type="submit" class="btn btn-success" value="Crear" />
-            </div>
+    </form>
 
-        </form>
-    </div>
 </div>

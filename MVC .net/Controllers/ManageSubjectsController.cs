@@ -10,9 +10,11 @@ using MVCnetcore.Models;
 
 namespace MVCnetcore.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "admin")]
     public class ManageSubjectsController : Controller
     {
+ //------------------------------------------------- CÁTEDRAS -----------------------------------------------------------------------------------
+ 
         public IActionResult Index()  //INDEX CON LISTADO DE MATERIAS
         {
             List<SubjectModel> ListOfSubjects = ListSubjects();
@@ -20,41 +22,17 @@ namespace MVCnetcore.Controllers
             
             if (TempData["Warning"] != null){ViewBag.Warning = TempData["Warning"];}
 
-            if (ListOfSubjects.Count == 0){ ViewBag.Error = "No se encontraron materias que mostrar"; }
+            if (ListOfSubjects.Count == 0){ ViewBag.Error = "No se encontraron materias que mostrar."; }
             
             return View(ListOfSubjects);
             
         }
-        public List<SubjectModel> ListSubjects() //Función que trae LISTADO DE MATERIAS 
-        {
-            List<SubjectModel> SubjectsList = new List<SubjectModel>();
-            try
-            {
-                using (var db = new Models.DB.AlkemyChallengeCDBContext())
-                {
-                    SubjectsList = (from d in db.Subjects
-                                    where d.NameSubjects != ""
-                                    select new SubjectModel
-                                    {
-                                        Id = d.IdSubjects,
-                                        NameSubject = d.NameSubjects
-
-                                    }).ToList();
-
-                }
-                return SubjectsList;
-            }
-            catch (Exception ex)
-            {
-                ViewBag.Error = "Error Inesperado. Detalle del Error: " + ex;
-
-                return SubjectsList;
-            }
-        }
+        
         public IActionResult NewSubject()  // VISTA DE NUEVA MATERIA
         {
             return View();
         }
+
         [HttpPost]
         public IActionResult NewSubject(string namesubject, bool isactive , int headteacherdni)
         {     //ENVIO DEL FORMULARIO DE LA NUEVA MATERIA, CORROBORACIÓN y CREACIÓN DE LA MISMA.
@@ -73,7 +51,7 @@ namespace MVCnetcore.Controllers
                         Models.DB.Subjects AddSubject = new Models.DB.Subjects();
 
                         AddSubject.NameSubjects = namesubject;
-                        AddSubject.ActiveSubjects = isactive;
+                        AddSubject.ActiveSubjects = true;
                         AddSubject.IdHeadTeacher = (from d in db.Teachers
                                                     where d.DniTeachers == headteacherdni
                                                     && d.ActiveTeachers == true
@@ -82,20 +60,20 @@ namespace MVCnetcore.Controllers
                         
                         if(AddSubject.IdHeadTeacher == default)
                         {
-                            TempData["warning"] = "El DNI ingresado no corresponde a un profesor activo o registrado";
+                            TempData["warning"] = "El DNI ingresado no corresponde a un profesor registrado.";
                             return RedirectToAction("Index", "ManageSubjects");
                         }
 
                         db.Subjects.Add(AddSubject);
                         db.SaveChanges();
 
-                        TempData["Success"] = "Se ha agregado la nueva materia exitosamente";
-                        // ViewBag.Success = "Se ha agregado la nueva materia exitosamente";
+                        TempData["Success"] = "Se ha agregado la nueva materia.";
+                  
                     }
                     else
                     {
-                        TempData["warning"] = "La materia que intenta crear ya existe";
-                        // ViewBag.Error = "La materia que intenta crear ya existe";                       
+                        TempData["warning"] = "La materia que intenta crear ya existe.";
+                                         
                     }
                 }
 
@@ -130,7 +108,7 @@ namespace MVCnetcore.Controllers
 
             List<ClassModel> ListOfClasses = ListClasses(ViewBag.SubjectId);
            
-            if (ListOfClasses.Count == 0) { ViewBag.Error = "No se encontraron Comisiones que mostrar"; }
+            if (ListOfClasses.Count == 0) { ViewBag.Error = "La materia no tiene comisiones."; }
 
             return View(ListOfClasses);
         }
@@ -139,6 +117,7 @@ namespace MVCnetcore.Controllers
         public IActionResult ModifySubject(int SubjectIdClass, string subjectName, int SubjectHeadTeacherId)
         {//MODIFICACION de MATERIA ELEGIDA Y LISTADO DE LAS COMISIONES QUE PERTENECEN A LA MISMA
             List<ClassModel> ListOfClasses = ListClasses(SubjectIdClass);
+           
             ViewBag.NameSubject = subjectName;           
             ViewBag.SubjectId = SubjectIdClass;
             ViewBag.HeadTeacherId = SubjectHeadTeacherId;
@@ -165,77 +144,18 @@ namespace MVCnetcore.Controllers
 
             if (TempData["NameSubject"] != null) { ViewBag.NameSubject = TempData["NameSubject"]; }
 
-            if (ListOfClasses.Count == 0) {ViewBag.Error = "No se encontraron Comisiones que mostrar";}
+            if (ListOfClasses.Count == 0) {ViewBag.Error = "La materia no tiene comisiones."; }
            
            
             return View(ListOfClasses);
         }
-        public string HeadTeacherSubject(int SubjectHeadTeacherId)
-        {
-            string headTeacher = null;
-            try 
-            {
-                
-                using (var db = new Models.DB.AlkemyChallengeCDBContext())
-                {
-                    headTeacher = (from d in db.Teachers
-                                   where d.IdTeachers == SubjectHeadTeacherId
-                                   select new string
-                                   (d.NameTeachers + " " + d.LastNameTeachers)
-                                   ).FirstOrDefault();
-                }
-                return headTeacher;
-            }
-            catch (Exception ex)
-            {
-                ViewBag.Error = "Error Inesperado. Detalle del Error: " + ex;
-
-             return headTeacher;
-            }
-        }
-        public List<ClassModel> ListClasses(int IdSubject) 
-        { //Función que genera listado de comisiones pertenecientes a una materia
-            List<ClassModel> ClassesList = new List<ClassModel>();
-            try
-            {
-                using (var db = new Models.DB.AlkemyChallengeCDBContext())
-                {
-                    ClassesList = (from d in db.Classes
-                                   where d.IdSubjects == IdSubject
-                                   select new ClassModel  
-                                   { 
-                                      IdClasses = d.IdClasses,
-                                      IdSubjects = d.IdSubjects,
-                                      MaxStudentClasses = d.MaxStudentClasses,
-                                      ClassroomClasses = d.ClassroomClasses,
-                                      MaxCapacityClasses = d.MaxCapacityClasses,
-                                      NameTeacher = (from c in db.Teachers
-                                                     where c.IdTeachers == d.IdTeachers
-                                                     select new string
-                                                     (c.LastNameTeachers+" "+c.NameTeachers
-                                                     )).FirstOrDefault()
-                                   }).ToList();
-
-                }
-                return ClassesList;
-            }
-            catch (Exception ex)
-            {
-                ViewBag.Error = "Error Inesperado. Detalle del Error: " + ex;
-
-                return ClassesList;
-            }
-        }
+       
+        
         [HttpGet]
         public IActionResult EditSubject()
-        {
+        { //FORMULARIO EDICIÓN DE DATOS DE CÁTEDRA
             if (TempData["SubjectId"] != null) { ViewBag.SubjectId = TempData["SubjectId"]; }
-            /*      if (TempData["NameSubject"] != null) { ViewBag.NameSubject = TempData["NameSubject"]; }
-
-                    if (TempData["HeadTeacherDni"] != null) { ViewBag.HeadTeacherDni = TempData["HeadTeacherDni"]; }
-                    if (TempData["IsActive"] != null) { ViewBag.IsActive = TempData["IsActive"]; }
-                    if (TempData["HeadTeacherName"] != null) { ViewBag.HeadTeacherName = TempData["HeadTeacherName"]; }
-            */
+            
                     SubjectModel subjectmodified = SubjectData(ViewBag.SubjectId);          
                     ViewBag.HeadTeacherName = subjectmodified.HeadTeacherName;
                     ViewBag.NameSubject = subjectmodified.NameSubject;
@@ -247,7 +167,7 @@ namespace MVCnetcore.Controllers
 
         [HttpPost]
         public IActionResult EditSubject(int subjectid)
-        {
+        { //FORMULARIO EDICIÓN DE DATOS DE CÁTEDRA
             SubjectModel subjectmodified = SubjectData(subjectid);
 
             ViewBag.SubjectId = subjectid;
@@ -256,53 +176,9 @@ namespace MVCnetcore.Controllers
             ViewBag.HeadTeacherDni = subjectmodified.HeadTeacherDni;
             ViewBag.IsActive = subjectmodified.isactive;
 
-           /* 
-            if (TempData["SubjectId"] != null) { ViewBag.SubjectId = TempData["SubjectId"]; }
-            if (TempData["NameSubject"] != null) { ViewBag.NameSubject = TempData["NameSubject"]; }
-            
-            if (TempData["HeadTeacherDni"] != null) { ViewBag.HeadTeacherDni = TempData["HeadTeacherDni"]; }
-            if (TempData["IsActive"] != null) { ViewBag.IsActive = TempData["IsActive"]; }
-            if (TempData["HeadTeacherName"] != null) { ViewBag.HeadTeacherName = TempData["HeadTeacherName"]; }
-           */
             return View();
         }
-        public SubjectModel SubjectData(int subjectid)
-        {
-            SubjectModel subjectData = new SubjectModel();
-            try
-            {
-                using (var db = new Models.DB.AlkemyChallengeCDBContext()) 
-                {
-                    subjectData = (from d in db.Subjects
-                                   where d.IdSubjects == subjectid
-                                   select new SubjectModel
-                                   {
-                                       Id = d.IdSubjects,
-                                       NameSubject = d.NameSubjects,
-                                       isactive = d.ActiveSubjects,
-                                       IdHeadTeacher = d.IdHeadTeacher,
-                                       HeadTeacherDni = 
-                                       (from c in db.Teachers
-                                        where c.IdTeachers == d.IdHeadTeacher
-                                        select c.DniTeachers
-                                        ).FirstOrDefault(), 
-                                       HeadTeacherName = 
-                                       (from c in db.Teachers
-                                        where c.IdTeachers == d.IdHeadTeacher
-                                        select new string
-                                        (c.NameTeachers +" "+c.LastNameTeachers)
-                                        ).FirstOrDefault()
-                                   }).FirstOrDefault();
-                }
-                return subjectData;  
-            }
-            catch (Exception ex)
-            {
-                ViewBag.Error = "Error Inesperado. Detalle del Error: " + ex;
-
-                return subjectData;
-            }
-        }
+        
         
         [HttpPost]
         public IActionResult UpdateSubject(int subjectid, string namesubject, int headteacherdni, bool isactive, string headteachername)
@@ -332,12 +208,12 @@ namespace MVCnetcore.Controllers
                     }
                     else
                     {
-                        TempData["Warning"] = "La materia que intenta modificar no existe";
+                        TempData["Warning"] = "La materia que intenta modificar no existe.";
                         TempData["SubjectId"] = subjectid;
                         return RedirectToAction("EditSubject", "ManageSubjects");
                     }
 
-                    TempData["Success"] = "Catedra Actualizada Exitosamente";
+                    TempData["Success"] = "Cátedra Actualizada.";
                     TempData["SubjectId"] = subjectid;
                     TempData["NameSubject"] = namesubject;
                     TempData["HeadTeacherId"] = NewHeadTeacherId;
@@ -353,17 +229,46 @@ namespace MVCnetcore.Controllers
 
             }
         }
-    
+
+        [HttpPost]
+        public IActionResult DeleteSubject(int subjectid)
+        {
+            try
+            {
+                using (var db = new Models.DB.AlkemyChallengeCDBContext())
+                {
+                    var SubjectToDelete = (from d in db.Subjects
+                                           where d.IdSubjects == subjectid
+                                           && d.ActiveSubjects == true
+                                           select d
+                                            ).FirstOrDefault();
+                    if (SubjectToDelete != null)
+                    {
+                        SubjectToDelete.ActiveSubjects = false;
+                        db.SaveChanges();
+                        TempData["Success"] = "Se ha eliminado la cátedra.";
+                    }
+                    else
+                    {
+                        throw new Exception("No se ha encontrado la cátedra a eliminar, intentálo de nuevo o contactate con la universidad");
+                    }
+                }
+                return RedirectToAction("Index", "ManageSubjects");
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] = "Error Inesperado. Detalle del Error: " + ex;
+                return RedirectToAction("Index", "ManageSubjects");
+            }
+        }
+
+ //------------------------------------------------- COMISIONES ------------------------------------------------------------------------------
+
         [HttpGet]
         public IActionResult EditClass()
         {
             if (TempData["SubjectId"] != null) { ViewBag.SubjectId = TempData["SubjectId"]; }
-     /*     if (TempData["Classroom"] != null) { ViewBag.Classroom = TempData["Classroom"]; }
-            if (TempData["TeacherDni"] != null) { ViewBag.TeacherDni = TempData["TeacherDni"]; }
-            if (TempData["IsActive"] != null) { ViewBag.IsActive = TempData["IsActive"]; }
-            if (TempData["TeacherName"] != null) { ViewBag.TeacherName = TempData["TeacherName"]; }
-     */
-
+    
             ClassModel classmodified = ClassData(ViewBag.SubjectId);
 
             ViewBag.SubjectId = ViewBag.SubjectId;
@@ -382,7 +287,6 @@ namespace MVCnetcore.Controllers
         {
             ClassModel classmodified = ClassData(subjectid);
 
-
             ViewBag.SubjectId = subjectid;
             ViewBag.ClassId = classid;
             ViewBag.TeacherName = classmodified.NameTeacher;
@@ -395,51 +299,10 @@ namespace MVCnetcore.Controllers
             return View(subjectid);
         }
 
-        public ClassModel ClassData(int subjectid)
-        {
-            ClassModel ClassData = new ClassModel();
-            try
-            {
-                using (var db = new Models.DB.AlkemyChallengeCDBContext())
-                {
-                    ClassData = (from d in db.Classes
-                                   where d.IdSubjects == subjectid
-                                   select new ClassModel
-                                   {
-                                       IdSubjects = subjectid,
-                                       ClassroomClasses = d.ClassroomClasses,
-                                       ActiveClasses = d.ActiveClasses,   
-                                       MaxStudentClasses= d.MaxStudentClasses,
-                                       TeacherDni =
-                                       (from c in db.Teachers
-                                        where c.IdTeachers == d.IdTeachers
-                                        select c.DniTeachers
-                                        ).FirstOrDefault(),
-                                       NameTeacher =
-                                       (from e in db.Teachers
-                                        where e.IdTeachers == d.IdTeachers
-                                        select new string
-                                        (e.NameTeachers + " " + e.LastNameTeachers)
-                                        ).FirstOrDefault(),
-                                       SubjectName =
-                                       (from f in db.Subjects
-                                        where f.IdSubjects == subjectid
-                                        select f.NameSubjects
-                                        ).FirstOrDefault(),
-                                   }).FirstOrDefault();
-                }
-                return ClassData;
-            }
-            catch (Exception ex)
-            {
-                ViewBag.Error = "Error Inesperado. Detalle del Error: " + ex;
-
-                return ClassData;
-            }
-        }
+        
 
         [HttpPost]
-        public IActionResult UpdateClass(int subjectid,int classid, int classroom, int maxstudent, int teacherdni , bool isactive)
+        public IActionResult UpdateClass(int subjectid,int classid, int classroom, int maxstudent, int teacherdni)
         {
             try
             {
@@ -460,19 +323,19 @@ namespace MVCnetcore.Controllers
                         if (NewTeacherId != default) { updateclass.IdTeachers = NewTeacherId; }
                         if (classroom != default) { updateclass.ClassroomClasses = classroom; }
                         if (maxstudent != default) { updateclass.MaxStudentClasses = maxstudent; }
-                        updateclass.ActiveClasses = isactive;
+                        
 
                         db.SaveChanges();
 
                     }
                     else
                     {
-                        TempData["Warning"] = "La materia que intenta modificar no existe";
+                        TempData["Warning"] = "La materia que intenta modificar no existe.";
                         TempData["SubjectId"] = subjectid;
                         return RedirectToAction("EditSubject", "ManageSubjects");
                     }
 
-                    TempData["Success"] = "Comision Actualizada Exitosamente";
+                    TempData["Success"] = "Comisión Actualizada.";
                     TempData["SubjectId"] = subjectid;
                     SubjectModel data = SubjectData(subjectid);
                     TempData["NameSubject"] = data.NameSubject;
@@ -499,7 +362,7 @@ namespace MVCnetcore.Controllers
 
         [HttpPost]
         public IActionResult CreateClass(int subjectid, int classroom, 
-            int teacherdni, int maxstudent, bool isactive)
+            int teacherdni, int maxstudent)
         {     //ENVIO DEL FORMULARIO DE LA NUEVA COMISION, CORROBORACIÓN y CREACIÓN DE LA MISMA.
             try
             {
@@ -516,7 +379,7 @@ namespace MVCnetcore.Controllers
                         AddClass.ClassroomClasses = classroom;
                         AddClass.MaxStudentClasses = maxstudent;
                         AddClass.IdSubjects = subjectid;
-                        AddClass.ActiveClasses = isactive;
+                        AddClass.ActiveClasses = true;
                         AddClass.MaxCapacityClasses = false;
                         AddClass.IdTeachers = (from d in db.Teachers
                                                where d.DniTeachers == teacherdni
@@ -525,20 +388,20 @@ namespace MVCnetcore.Controllers
 
                         if (AddClass.IdTeachers == default)
                         {
-                            TempData["warning"] = "El DNI ingresado no corresponde a un profesor activo o registrado";
+                            TempData["warning"] = "El DNI ingresado no corresponde a un profesor registrado.";
                             return RedirectToAction("Index", "ManageSubjects");
                         }
 
                         db.Classes.Add(AddClass);
                         db.SaveChanges();
 
-                        TempData["Success"] = "Se ha agregado la nueva materia exitosamente";
-                        //ViewBag.Success = "Se ha agregado la nueva materia exitosamente";
+                        TempData["Success"] = "Se ha agregado la nueva materia.";
+                      
                     }
                     else
                     {
-                        TempData["warning"] = "La materia que intenta crear ya existe";
-                        //ViewBag.Error = "La materia que intenta crear ya existe";                       
+                        TempData["warning"] = "La materia que intenta crear ya existe.";
+                                         
                         
                     }
                 }
@@ -552,6 +415,206 @@ namespace MVCnetcore.Controllers
                // TempData["SubjectId"] = subjectid;
                 return RedirectToAction("Index", "ManageSubjects");
                 //return View();
+            }
+        }
+        [HttpPost]
+        public IActionResult DeleteClass(int classid)
+        {
+            try
+            {
+                using (var db = new Models.DB.AlkemyChallengeCDBContext())
+                {
+                    var ClassToDelete = (from d in db.Classes
+                                           where d.IdClasses == classid
+                                           && d.ActiveClasses == true
+                                           select d
+                                            ).FirstOrDefault();
+                    if (ClassToDelete != null)
+                    {
+                        ClassToDelete.ActiveClasses = false;
+                        db.SaveChanges();
+                        TempData["Success"] = "Se ha eliminado la comisión.";
+                    }
+                    else
+                    {
+                        throw new Exception("No se ha encontrado la comisión a eliminar, intentálo de nuevo o contactate con la universidad");
+                    }
+                }
+                return RedirectToAction("Index", "ManageSubjects");
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] = "Error Inesperado. Detalle del Error: " + ex;
+                return RedirectToAction("Index", "ManageSubjects");
+            }
+        }
+        
+        // ------------------------------------------------   FUNCIONES     -----------------------------------------------------------------------------
+        public ClassModel ClassData(int subjectid)
+        {
+            ClassModel ClassData = new ClassModel();
+            try
+            {
+                using (var db = new Models.DB.AlkemyChallengeCDBContext())
+                {
+                    ClassData = (from d in db.Classes
+                                 where d.IdSubjects == subjectid
+                                 select new ClassModel
+                                 {
+                                     IdSubjects = subjectid,
+                                     ClassroomClasses = d.ClassroomClasses,
+                                     ActiveClasses = d.ActiveClasses,
+                                     MaxStudentClasses = d.MaxStudentClasses,
+                                     TeacherDni =
+                                     (from c in db.Teachers
+                                      where c.IdTeachers == d.IdTeachers
+                                      select c.DniTeachers
+                                      ).FirstOrDefault(),
+                                     NameTeacher =
+                                     (from e in db.Teachers
+                                      where e.IdTeachers == d.IdTeachers
+                                      select new string
+                                      (e.NameTeachers + " " + e.LastNameTeachers)
+                                      ).FirstOrDefault(),
+                                     SubjectName =
+                                     (from f in db.Subjects
+                                      where f.IdSubjects == subjectid
+                                      select f.NameSubjects
+                                      ).FirstOrDefault(),
+                                 }).FirstOrDefault();
+                }
+                return ClassData;
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Error = "Error Inesperado. Detalle del Error: " + ex;
+
+                return ClassData;
+            }
+        }
+
+        public List<ClassModel> ListClasses(int IdSubject)
+        { //Función que genera listado de comisiones pertenecientes a una materia
+            List<ClassModel> ClassesList = new List<ClassModel>();
+            try
+            {
+                using (var db = new Models.DB.AlkemyChallengeCDBContext())
+                {
+                    ClassesList = (from d in db.Classes
+                                   where d.IdSubjects == IdSubject
+                                   && d.ActiveClasses == true
+                                   select new ClassModel
+                                   {
+                                       IdClasses = d.IdClasses,
+                                       IdSubjects = d.IdSubjects,
+                                       MaxStudentClasses = d.MaxStudentClasses,
+                                       ClassroomClasses = d.ClassroomClasses,
+                                       MaxCapacityClasses = d.MaxCapacityClasses,
+                                       NameTeacher = (from c in db.Teachers
+                                                      where c.IdTeachers == d.IdTeachers
+                                                      select new string
+                                                      (c.LastNameTeachers + " " + c.NameTeachers
+                                                      )).FirstOrDefault()
+                                   }).ToList();
+
+                }
+                return ClassesList;
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Error = "Error Inesperado. Detalle del Error: " + ex;
+
+                return ClassesList;
+            }
+        }
+
+        public List<SubjectModel> ListSubjects() //Función que trae LISTADO DE MATERIAS 
+        {
+            List<SubjectModel> SubjectsList = new List<SubjectModel>();
+            try
+            {
+                using (var db = new Models.DB.AlkemyChallengeCDBContext())
+                {
+                    SubjectsList = (from d in db.Subjects
+                                    where d.NameSubjects != ""
+                                    && d.ActiveSubjects == true
+                                    select new SubjectModel
+                                    {
+                                        Id = d.IdSubjects,
+                                        NameSubject = d.NameSubjects,
+                                        IdHeadTeacher = d.IdHeadTeacher
+
+                                    }).ToList();
+
+                }
+                return SubjectsList;
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Error = "Error Inesperado. Detalle del Error: " + ex;
+
+                return SubjectsList;
+            }
+        }
+        public SubjectModel SubjectData(int subjectid)
+        {
+            SubjectModel subjectData = new SubjectModel();
+            try
+            {
+                using (var db = new Models.DB.AlkemyChallengeCDBContext())
+                {
+                    subjectData = (from d in db.Subjects
+                                   where d.IdSubjects == subjectid
+                                   select new SubjectModel
+                                   {
+                                       Id = d.IdSubjects,
+                                       NameSubject = d.NameSubjects,
+                                       isactive = d.ActiveSubjects,
+                                       IdHeadTeacher = d.IdHeadTeacher,
+                                       HeadTeacherDni =
+                                       (from c in db.Teachers
+                                        where c.IdTeachers == d.IdHeadTeacher
+                                        select c.DniTeachers
+                                        ).FirstOrDefault(),
+                                       HeadTeacherName =
+                                       (from c in db.Teachers
+                                        where c.IdTeachers == d.IdHeadTeacher
+                                        select new string
+                                        (c.NameTeachers + " " + c.LastNameTeachers)
+                                        ).FirstOrDefault()
+                                   }).FirstOrDefault();
+                }
+                return subjectData;
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Error = "Error Inesperado. Detalle del Error: " + ex;
+
+                return subjectData;
+            }
+        }
+
+        public string HeadTeacherSubject(int SubjectHeadTeacherId)
+        {
+            string headTeacher = null;
+            try
+            {
+
+                using (var db = new Models.DB.AlkemyChallengeCDBContext())
+                {
+                    headTeacher = (from d in db.Teachers
+                                   where d.IdTeachers == SubjectHeadTeacherId
+                                   select new string
+                                   (d.NameTeachers + " " + d.LastNameTeachers)
+                                   ).FirstOrDefault();
+                }
+                return headTeacher;
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Error = "Error Inesperado. Detalle del Error: " + ex;
+
+                return headTeacher;
             }
         }
     }

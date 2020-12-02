@@ -1,8 +1,165 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
-}
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+
+    if (Context.User.IsInRole("student"))
+    {
+        <div class="backimageStudent rounded">
+            <br /><br /><br />
+            <div class="bg-dark largeopacity ">
+                <h1 class="text-center text-light">Bienvenido @ViewBag.username</h1>
+            </div>
+            <br />
+
+        </div>
+        <br />
+        <div class="container-fluid">
+            <h2 class="text-center text-dark">Ahora podés inscribirte sin moverte de tu casa y gestionar todas tus inscripciones.</h2>
+            <div class="row">
+                <div class="col-lg-3 col-md-3 offset-lg-2 offset-md-2 col-sm-6 top-margin">
+                    <form method="post" action="@Url.Content("~/ConsultSubjects/")">
+                        <div class="card bg-dark ">
+                            <div class="card-header">
+                                <h4 class="text-center">
+                                    Inscribirme
+                                </h4>
+                            </div>
+                            <div class="card-body text-center">
+                                <h6>Seleccioná una cátedra e inscribite.</h6>
+                                <p>Es muy sencillo.</p>
+                                
+                            </div>
+                            <div class="card-footer text-center align-content-center">
+                                <input class="btn btn-primary active text-white float-center" type="submit" value="Inscribirme" />
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="col-lg-3 col-md-3 offset-lg-2 offset-md-2 col-sm-6 top-margin">
+                    <form method="post" action="@Url.Content("~/MyInscriptions/")">
+                        <div class="card bg-dark">
+                            <div class="card-header">
+                                <h4 class="text-center">
+                                    Mis Inscripciones
+                                </h4>
+                            </div>
+                            <div class="card-body text-center">
+                                <h6>Gestioná tus inscripciones.</h6>
+                                <p>Visualizá los datos de tus inscripciones. </p>
+                                <p>También podés cancelarlas con 1 solo click. </p>
+                            </div>
+                            <div class="card-footer text-center align-content-center">
+                                <input class="btn btn-primary active text-white float-center" type="submit" value="Mis Inscripciones" />
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <br />
+        <div class="container-fluid">
+            <div class="row bg-transparent">
+                <div class="bg-dark rounded full-width">
+                    <h4 class="text-light text-center font-weight-bold">Nueva Página de Gestión Estudiantil</h4>
+                    <br />
+                    <p class="text-white font-weight-light text-center">
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam feugiat eros orci, quis pellentesque odio eleifend vel. Nunc scelerisque dui ac nisl interdum ultrices.
+                    </p>
+                    <p class="text-white font-weight-light collapse" id="moreinfo1">
+
+                        Morbi eu porttitor dui. Nulla vulputate dolor sed elit aliquet aliquet sed in lectus. Aliquam dictum lacus leo, non rhoncus odio aliquam eu. Cras feugiat, risus quis
+                        suscipit vulputate, ex lorem fringilla arcu, vitae egestas quam sem ut velit. Nullam dictum, tortor vitae vestibulum consequat, risus augue faucibus sapien, ut scelerisque
+                        tortor magna sit amet turpis. Fusce non felis blandit, faucibus justo nec, ultrices dolor. Praesent lacinia euismod nulla nec luctus. Aliquam erat volutpat. Mauris a lectus
+                        sit amet metus hendrerit mollis sit amet sed ante. Praesent egestas sem urna, eu consectetur augue accumsan id. Cras consectetur accumsan nulla, sit amet finibus massa rutrum eget.
+                        Vivamus accumsan eros quis eleifend imperdiet. Vestibulum elementum lorem velit, at gravida erat convallis vitae.
+
+                        Etiam pulvinar quis felis a porttitor. Cras at massa eu risus accumsan egestas. Integer bibendum magna eget ultricies malesuada. Cras rutrum nunc ac convallis posuere.
+                        Vestibulum in dictum ligula. Maecenas consequat scelerisque mattis. Nulla varius posuere gravida. Vivamus nec arcu ac ligula auctor vehicula a sit amet libero.
+                        Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Morbi vel leo non ante dictum hendrerit id et ipsum.
+                    </p>
+                    <div class="align-content-center text-center">
+                        <input class="btn btn-primary active text-white text-center" data-toggle="collapse" data-target="#moreinfo1" type="button" value="Ver más" />
+                    </div>
+                    <br />
+                </div>                
+                <br /><br />
+                <div class="bg-dark rounded full-width top-margin">
+                    <h4 class="text-light font-weight-bold text-center">Apertura Inscripción 2021</h4>
+                    <br />
+                    <p class="text-white font-weight-light text-center">
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam feugiat eros orci, quis pellentesque odio eleifend vel. Nunc scelerisque dui ac nisl interdum ultrices.
+                    </p>
+                    <p class="text-white font-weight-light collapse" id="moreinfo2">
+                        Morbi eu porttitor dui. Nulla vulputate dolor sed elit aliquet aliquet sed in lectus. Aliquam dictum lacus leo, non rhoncus odio aliquam eu. Cras feugiat, risus quis
+                        suscipit vulputate, ex lorem fringilla arcu, vitae egestas quam sem ut velit. Nullam dictum, tortor vitae vestibulum consequat, risus augue faucibus sapien, ut scelerisque
+                        tortor magna sit amet turpis. Fusce non felis blandit, faucibus justo nec, ultrices dolor. Praesent lacinia euismod nulla nec luctus. Aliquam erat volutpat. Mauris a lectus
+                        sit amet metus hendrerit mollis sit amet sed ante. Praesent egestas sem urna, eu consectetur augue accumsan id. Cras consectetur accumsan nulla, sit amet finibus massa rutrum eget.
+                        Vivamus accumsan eros quis eleifend imperdiet. Vestibulum elementum lorem velit, at gravida erat convallis vitae.
+
+                        Etiam pulvinar quis felis a porttitor. Cras at massa eu risus accumsan egestas. Integer bibendum magna eget ultricies malesuada. Cras rutrum nunc ac convallis posuere.
+                        Vestibulum in dictum ligula. Maecenas consequat scelerisque mattis. Nulla varius posuere gravida. Vivamus nec arcu ac ligula auctor vehicula a sit amet libero.
+                        Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Morbi vel leo non ante dictum hendrerit id et ipsum.
+                    </p>
+                    <div class="align-content-center text-center">
+                        <input class="btn btn-primary active text-white text-center" type="button" data-toggle="collapse" data-target="#moreinfo2" value="Ver más" />
+                    </div>
+                    <br />
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
+<div class="container-fluid">
+    <div class="row bg-transparent">
+        <div class="bg-dark rounded full-width">
+            <h4 class="text-light text-center font-weight-bold">Nueva Página de Gestión Estudiantil</h4>
+            <br />
+            <p class="text-white font-weight-light text-center">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam feugiat eros orci, quis pellentesque odio eleifend vel. Nunc scelerisque dui ac nisl interdum ultrices.
+            </p>
+            <p class="text-white font-weight-light collapse" id="moreinfo1">
+
+                Morbi eu porttitor dui. Nulla vulputate dolor sed elit aliquet aliquet sed in lectus. Aliquam dictum lacus leo, non rhoncus odio aliquam eu. Cras feugiat, risus quis
+                suscipit vulputate, ex lorem fringilla arcu, vitae egestas quam sem ut velit. Nullam dictum, tortor vitae vestibulum consequat, risus augue faucibus sapien, ut scelerisque
+                tortor magna sit amet turpis. Fusce non felis blandit, faucibus justo nec, ultrices dolor. Praesent lacinia euismod nulla nec luctus. Aliquam erat volutpat. Mauris a lectus
+                sit amet metus hendrerit mollis sit amet sed ante. Praesent egestas sem urna, eu consectetur augue accumsan id. Cras consectetur accumsan nulla, sit amet finibus massa rutrum eget.
+                Vivamus accumsan eros quis eleifend imperdiet. Vestibulum elementum lorem velit, at gravida erat convallis vitae.
+
+                Etiam pulvinar quis felis a porttitor. Cras at massa eu risus accumsan egestas. Integer bibendum magna eget ultricies malesuada. Cras rutrum nunc ac convallis posuere.
+                Vestibulum in dictum ligula. Maecenas consequat scelerisque mattis. Nulla varius posuere gravida. Vivamus nec arcu ac ligula auctor vehicula a sit amet libero.
+                Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Morbi vel leo non ante dictum hendrerit id et ipsum.
+            </p>
+            <div class="align-content-center text-center">
+                <input class="btn btn-primary active text-white text-center" data-toggle="collapse" data-target="#moreinfo1" type="button" value="Ver más" />
+            </div>
+            <br />
+        </div>
+        <br /><br />
+        <div class="bg-dark rounded full-width top-margin">
+            <h4 class="text-light font-weight-bold text-center">Apertura Inscripción 2021</h4>
+            <br />
+            <p class="text-white font-weight-light text-center">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam feugiat eros orci, quis pellentesque odio eleifend vel. Nunc scelerisque dui ac nisl interdum ultrices.
+            </p>
+            <p class="text-white font-weight-light collapse" id="moreinfo2">
+                Morbi eu porttitor dui. Nulla vulputate dolor sed elit aliquet aliquet sed in lectus. Aliquam dictum lacus leo, non rhoncus odio aliquam eu. Cras feugiat, risus quis
+                suscipit vulputate, ex lorem fringilla arcu, vitae egestas quam sem ut velit. Nullam dictum, tortor vitae vestibulum consequat, risus augue faucibus sapien, ut scelerisque
+                tortor magna sit amet turpis. Fusce non felis blandit, faucibus justo nec, ultrices dolor. Praesent lacinia euismod nulla nec luctus. Aliquam erat volutpat. Mauris a lectus
+                sit amet metus hendrerit mollis sit amet sed ante. Praesent egestas sem urna, eu consectetur augue accumsan id. Cras consectetur accumsan nulla, sit amet finibus massa rutrum eget.
+                Vivamus accumsan eros quis eleifend imperdiet. Vestibulum elementum lorem velit, at gravida erat convallis vitae.
+
+                Etiam pulvinar quis felis a porttitor. Cras at massa eu risus accumsan egestas. Integer bibendum magna eget ultricies malesuada. Cras rutrum nunc ac convallis posuere.
+                Vestibulum in dictum ligula. Maecenas consequat scelerisque mattis. Nulla varius posuere gravida. Vivamus nec arcu ac ligula auctor vehicula a sit amet libero.
+                Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Morbi vel leo non ante dictum hendrerit id et ipsum.
+            </p>
+            <div class="align-content-center text-center">
+                <input class="btn btn-primary active text-white text-center" type="button" data-toggle="collapse" data-target="#moreinfo2" value="Ver más" />
+            </div>
+            <br />
+        </div>
+    </div>
 </div>
+    }
+}

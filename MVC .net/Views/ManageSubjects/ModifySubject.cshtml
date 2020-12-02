@@ -2,62 +2,86 @@
     @model List<ClassModel>
 
     ViewData["Title"] = "ModifySubject";
+
 }
+<div class="backimageAdmin">
+    <h2 class="text-center">Gestionar Materias</h2>
+    <br />
+    <h3 class="text-center">@ViewBag.NameSubject</h3>
+    <br />
+    <h5 class="text-center">Jefa/e de cátedra: @ViewBag.HeadTeacherName</h5>
 
-<h1 class="text-center">Gestionar Materias</h1>
-
+</div>
 <br />
-<div class="row text-center col-lg-6 col-lg-offset-3 col-md-8 col-md-offset-2 col-sm-12">
-    <div class="float-left">
-         <form action="@Url.Content("~/ManageSubjects/EditSubject")" method="post">
-             <input type="hidden" name="subjectid" id="subjectid" value="@ViewBag.SubjectId" />
-            
-             <input type="submit" value="Editar Materia" class="rounded-circle" />
-         </form>
-    </div>  
-    <div class="float-right">
-        <form action="@Url.Content("~/ManageSubjects/NewClass")" method="post">
-            <input type="hidden" name="subjectid" id="subjectid" value="@ViewBag.SubjectId" />
-            <input type="submit" value="Agregar Nueva Comisión" class="rounded-circle" />
-        </form>
+<div class="container-fluid rounded bg-secondary largeopacity">
+    @{
+        if (ViewBag.Success != "" && ViewBag.Success != null)
+        {
+            <div class="SuccessMessage text-success font-weight-bold text-center bg-dark" name="AddSubjectSuccess" id="AddSubjectSuccess">
+                <p>@ViewBag.Success</p>
+            </div>
+        }
+        if (ViewBag.Warning != "" && ViewBag.Warning != null)
+        {
+            <div class="danger text-danger font-weight-light text-center bg-dark" name="warning" id="warning">
+                <p>@ViewBag.Warning</p>
+            </div>
+        }
+        if (ViewBag.Error != "" && ViewBag.Error != null)
+        {
+            <div class="danger text-danger font-weight-bold text-center bg-dark" name="error" id="error">
+                <p>@ViewBag.Error</p>
+            </div>
+        }
+    }
+    <br />
+    <div class="row">
+        <div class="text-center align-content-center col-lg-2 offset-lg-3 col-md-3 offset-md-2 col-sm-6">
+            <form action="@Url.Content("~/ManageSubjects/EditSubject")" method="post">
+                <input type="hidden" name="subjectid" id="subjectid" value="@ViewBag.SubjectId" />
+                <input type="submit" value="Editar Materia" class="btn btn-dark text-light" />
+            </form>
+        </div>
+
+        <div class="text-center upperpadding col-lg-2 offset-lg-2 col-md-3 offset-md-2 col-sm-6">
+            <form action="@Url.Content("~/ManageSubjects/NewClass")" method="post">
+                <input type="hidden" name="subjectid" id="subjectid" value="@ViewBag.SubjectId" />
+                <input type="submit" value="Nueva Comisión" class="btn btn-dark text-light" />
+            </form>
+        </div>
     </div>
-</div>
-<br />
-<div class="Success" name="AddSubjectSuccess" id="AddSubjectSuccess">
-    <span>@ViewBag.Success</span>
-</div>
-<div class="Danger" name="AddSubjectUnsuccessful" id="AddSubjectUnsuccessful">
-    <bold>@ViewBag.Warning</bold>
-</div>
-<br />
-<h3 class="text-left">@ViewBag.NameSubject</h3>
-<br />
-<h5 class="text-left">Jefa/e de cátedra: @ViewBag.HeadTeacherName</h5>
+    <br />
 
-<br />
-<div class="danger" name="wrongenter" id="wrongenter">
-    <bold>@ViewBag.Error</bold>
-</div>
-<br />
-<div class="success">
     @{ if (Model.Count != 0)
         {
             foreach (ClassModel Class in Model)
             {
-        <div class="card row">
-            <form action="@Url.Content("~/ManageSubjects/EditClass")" method="post" class="row col-lg-10 col-lg-offset-2">
-                <div class="row col-lg-8 col-md-8 col-sm-12">
-                    <p class="text-left">Comisión: @Class.ClassroomClasses</p>
-                    <p class="text-right">Profesor :@Class.NameTeacher</p>
+                <div class="card card-body bg-dark border-dark border-3">
+                        <div class="row">
+                                <form class="row col-lg-9 col-md-9 offset-lg-1 offset-md-1 col-sm-12" action="@Url.Content("~/ManageSubjects/EditClass")" method="post">
+                                    <input type="hidden" name="classid" id="classid" value="@Class.IdClasses" />
+                                    <input type="hidden" name="subjectid" id="subjectid" value="@Class.IdSubjects" />
+                                    
+                                    <div class="col-lg-4 col-md-3 col-sm-6 bg-transparent">
+                                        <p class="text-white text-center">Comisión: @Class.ClassroomClasses</p>
+                                    </div>
+                                    <div class="col-lg-3 col-md-3 col-sm-6 bg-transparent">
+                                        <p class="text-white text-center">Profesor :@Class.NameTeacher</p>
+                                    </div>
+                                    <div class="col-lg-3 col-md-2 col-sm-6 bg-transparent">
+                                        <p class="text-white text-center">Cupo máximo: @Class.MaxStudentClasses</p>
+                                    </div>
+                                    <div class="col-lg-2 col-md-2 col-sm-6 bg-transparent">
+                                        <input type="submit" class="btn btn-primary active text-white float-right" value="Modificar" />
+                                    </div>
+                                </form>
+                                <form class="col-lg-2 col-md-2 col-sm-6 bg-transparent text-center" method="post" action="@Url.Content("~/ManageSubjects/DeleteClass")">                
+                                    <input type="hidden" name="classid" id="classid" value="@Class.IdClasses" />
+                                    <input type="submit" class="btn btn-danger active text-white float-right" value="Eliminar" />
+                                </form>
+                        </div>
                 </div>
-                <input type="hidden" name="classid" id="classid" value="@Class.IdClasses"/>
-                <input type="hidden" name="subjectid" id="subjectid" value="@Class.IdSubjects" />
-                <div class="row col-lg-4 col-md-4 col-sm-12">
-                    <p class="text-left">Cupo máximo: @Class.MaxStudentClasses</p>
-                    <input type="submit" class="float-right btn-sm btn-success text-center" value="Modificar" />
-                </div>
-            </form>
-        </div>
+                <br />
             }
         }
     }

@@ -1,37 +1,65 @@
-﻿@{
+﻿@{  
     @model int
     ViewData["Title"] = "NewClass";
+   
 }
 
-<div class="container ">
-    <div class="card col-lg-8 col-lg-offset-2 col-sm-12  ">
-        <div class="danger" name="wrongenter" id="wrongenter">
-            @ViewBag.Error
+<div class="backimageAdmin rounded">
+    <form action="@Url.Content("~/ManageSubjects/CreateClass")" method="post" class="align-content-center card border-dark border-3 bg-transparent" name="newclassform" id="newclassform">
+        <br />
+        <div class="form-group col-lg-6 col-md-6 col-sm-10 offset-lg-3 offset-md-3 offset-sm-1 text-center">
+            <h3 class="text-light">Nueva Comisión</h3>
+            <p class="text-light">Creá una nueva comisión.</p>
         </div>
         <br />
-        <form action="@Url.Content("~/ManageSubjects/CreateClass")" method="post" class="col-lg-6 col-lg-offset-3 col-md-6 col-md-offset-3 col-sm-12" name="LogInForm" id="LogInForm">
-            <input name="subjectid" id="subjectid" type="hidden" value="@Model" />
-            <div class="row text-center align-content-center">
-                <label for="classroom">Nro de comision</label>
-                <input type="text" name="classroom" id="classroom" />
+        @{
+            if (ViewBag.Success != "" && ViewBag.Success != null)
+            {
+                <div class="SuccessMessage text-success font-weight-bold text-center bg-dark" name="AddSubjectSuccess" id="AddSubjectSuccess">
+                    <p>@ViewBag.Success</p>
+                </div>
+            }
+            if (ViewBag.Warning != "" && ViewBag.Warning != null)
+            {
+                <div class="danger text-danger font-weight-light text-center bg-dark" name="warning" id="warning">
+                    <p>@ViewBag.Warning</p>
+                </div>
+            }
+            if (ViewBag.Error != "" && ViewBag.Error != null)
+            {
+                <div class="danger text-danger font-weight-bold text-center bg-dark" name="error" id="error">
+                    <p>@ViewBag.Error</p>
+                </div>
+            }
+        }
+        <br />
+
+        <input name="subjectid" id="subjectid" type="hidden" value="@Model" />
+
+        <div class="form-group col-lg-6 col-md-6 col-sm-10 offset-lg-3 offset-md-3 offset-sm-1 text-center">
+            <div class="bg-dark rounded largeopacity">
+                <label for="classroom">Número de comision</label>
             </div>
-            <div class="row text-center align-content-center">
-                <label for="maxstudent">Cupo Maximo de Estudiantes</label>
-                <input type="number" name="maxstudent" id="maxstudent" />
+            <input class="form-control" type="number" name="classroom" id="classroom" />
+        </div>
+
+        <div class="form-group col-lg-6 col-md-6 col-sm-10 offset-lg-3 offset-md-3 offset-sm-1 text-center">
+            <div class="bg-dark rounded largeopacity">
+                <label for="maxstudent">Cupo máximo de estudiantes</label>
             </div>
-            <div class="row text-center align-content-center">
+            <input class="form-control" type="number" name="maxstudent" id="maxstudent" />
+        </div>
+
+        <div class="form-group col-lg-6 col-md-6 col-sm-10 offset-lg-3 offset-md-3 offset-sm-1 text-center">
+            <div class="bg-dark rounded largeopacity">
                 <label for="teacherdni">Dni Profesor</label>
-                <input type="tel" name="teacherdni" id="teacherdni" />
             </div>
-            <div class="row text-center">
-                <input class="form-check-input" type="checkbox" value="true" name="isactive" id="isactive">
-                <label class="form-check-label" for="isactive">
-                    Activar Materia
-                </label>
-            </div>
-            <div class="row text-center align-content-center">
-                <input type="submit" class="btn btn-success" value="Crear" />
-            </div>
-        </form>
-    </div>
+            <input class="form-control" type="tel" minlength="7" maxlength="8" oninvalid="this.setCustomValidity('El DNI debe contener números y una longitud de entre 7 y 8 dígitos')" value="@ViewBag.TeacherDni" name="teacherdni" id="teacherdni" />
+        </div>
+
+        <div class="form-group col-lg-4 col-md-4 col-sm-8 offset-lg-4 offset-md-4 offset-sm-2 text-center align-content-center">
+            <input type="submit" class="btn btn-dark text-light" value="Crear" />
+        </div>
+
+    </form>
 </div>

@@ -8,36 +8,21 @@
     <link rel="stylesheet" href="~/css/site.css" />
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">MVCnetcore</a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
+    
+    <div class="container-fluid d-flex flex-column min-vh-100 nologgeado">
+        <main role="main" class="pb-3 lightgrey">
             @RenderBody()
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2020 - MVCnetcore - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+    <footer class="border-top footer top-margin border-dark border-3 bg-dark text-white font-weight-light align-bottom">
+        <div class="container-fluid">
+            <div class="text-center"> &copy; 2020 - MVCnetcore - <a asp-area="" asp-controller="Home" asp-action="index">Links</a></div>
+            <hr />
+            <h5 class="text-center">Información de contacto</h5>
+            <h6 class="text-sm-center ">Telefono: 1233451</h6>
+            <h6 class="text-sm-center ">Email: ejemplo@correo.com</h6>
+            <br />
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>

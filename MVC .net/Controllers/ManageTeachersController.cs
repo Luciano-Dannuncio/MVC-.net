@@ -7,9 +7,10 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MVCnetcore.Models;
 
+
 namespace MVCnetcore.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "admin")]
     public class ManageTeachers : Controller
     {
         public IActionResult Index()
@@ -20,7 +21,7 @@ namespace MVCnetcore.Controllers
             
             if (TempData["Error"] != null) {ViewBag.Error = TempData["Error"];}
 
-            if (teacherlist.Count == 0) { ViewBag.Warning = "No se encontraron profesores registrados para mostrar"; }
+            if (teacherlist.Count == 0) { ViewBag.Warning = "No se encontraron profesores registrados para mostrar."; }
                        
          return View(teacherlist);
             
@@ -35,6 +36,7 @@ namespace MVCnetcore.Controllers
             try
             {
                 Models.DB.Teachers newteacher = new Models.DB.Teachers();
+               
                 using (var db = new Models.DB.AlkemyChallengeCDBContext()) 
                 {
                    var isteacher = (from d in db.Teachers
@@ -47,7 +49,7 @@ namespace MVCnetcore.Controllers
                         newteacher.NameTeachers = teachername;
                         newteacher.LastNameTeachers = teacherlastname;
                         newteacher.DniTeachers = teacherdni;
-                        newteacher.ActiveTeachers = isactive;
+                        newteacher.ActiveTeachers = true;
 
                         db.Teachers.Add(newteacher);
                         db.SaveChanges();
@@ -57,7 +59,7 @@ namespace MVCnetcore.Controllers
                         TempData["Error"] = "El Dni ingresado ya pertenece a un profesor registrado";
                         return RedirectToAction("Index","ManageTeachers");
                     }
-                    TempData["Success"] = "Se ha registrado un nuevo profesor exitosamente";
+                    TempData["Success"] = "Se ha registrado un nuevo profesor.";
                     return RedirectToAction("Index", "ManageTeachers");
                 }
             }
@@ -71,6 +73,7 @@ namespace MVCnetcore.Controllers
         public IActionResult ModifyTeacher(int teacherid)
         {
             TeacherModel modifiedteacher = TeacherData(teacherid);
+           
             ViewBag.TeacherId = modifiedteacher.Id;
             ViewBag.TeacherName = modifiedteacher.Name;
             ViewBag.TeacherLastName = modifiedteacher.LastName;
@@ -82,11 +85,12 @@ namespace MVCnetcore.Controllers
         [HttpPost]
         public IActionResult UpdateTeacher(int teacherid, 
             string teachername, string teacherlastname, 
-            int teacherdni, bool isactive)
+            int teacherdni)
         {
             try
             {
                 Models.DB.Teachers teacherupdate = new Models.DB.Teachers();
+                
                 using (var db = new Models.DB.AlkemyChallengeCDBContext())
                 {
                     teacherupdate = (from d in db.Teachers
@@ -99,14 +103,14 @@ namespace MVCnetcore.Controllers
                         if (teacherdni != default ) { teacherupdate.DniTeachers = teacherdni; }
                         if (teachername != default && teachername != "") { teacherupdate.NameTeachers = teachername; }
                         if (teacherlastname != default && teacherlastname != "") { teacherupdate.LastNameTeachers = teacherlastname; }
-                        teacherupdate.ActiveTeachers = isactive;
+                        
                         
                         db.SaveChanges();
-                        TempData["Success"] = "Se ha actualizado los datos del profesor exitosamente";
+                        TempData["Success"] = "Se han actualizado los datos del profesor.";
                     }
                     else 
                     {
-                        TempData["error"] = "El profesor que se quiere modificar no exite o los datos ingresados son incorrectos";
+                        TempData["error"] = "El profesor que intenta actualizar no exite o los datos ingresados son incorrectos";
                         return RedirectToAction("Index","ManageTeachers");
                     }
                 }
@@ -120,7 +124,38 @@ namespace MVCnetcore.Controllers
             }
 
         }
-
+        [HttpPost]
+        public IActionResult DeleteTeacher(int teacherid)
+        {
+            try
+            {
+                using (var db = new Models.DB.AlkemyChallengeCDBContext()) 
+                {
+                    var TeacherToDelete = (from d in db.Teachers
+                                           where d.IdTeachers == teacherid
+                                           && d.ActiveTeachers == true
+                                           select d
+                                            ).FirstOrDefault();
+                    if (TeacherToDelete != null)
+                    {
+                        TeacherToDelete.ActiveTeachers = false;
+                        db.SaveChanges();
+                        TempData["Success"] = "Se ha eliminado al profesor.";
+                    }
+                    else 
+                    {
+                        throw new Exception("No se ha encontrado el profesor a eliminar, intentálo de nuevo o contactate con la universidad");
+                    }
+                }
+                return RedirectToAction("Index","ManageTeachers");
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] = "Error Inesperado. Detalle del Error: " + ex;
+                return RedirectToAction("Index", "ManageTeachers");
+            }
+        }
+//-------------------------------------------Funciones---------------------------------------------------------------------
         public TeacherModel TeacherData(int teacherid)
         {
             TeacherModel teacherdata = new TeacherModel();
@@ -158,6 +193,7 @@ namespace MVCnetcore.Controllers
                 {
                     TeachersList = (from d in db.Teachers
                                     where d.NameTeachers != ""
+                                    && d.ActiveTeachers == true
                                     select new TeacherModel
                                     {
                                         Id = d.IdTeachers,

@@ -60,12 +60,68 @@ html {
 
 body {
   /* Margin bottom by footer height */
-  margin-bottom: 60px;
+  
 }
 .footer {
-  position: absolute;
+  position: page;
   bottom: 0;
   width: 100%;
-  white-space: nowrap;
+  white-space: normal;
   line-height: 60px; /* Vertically center the text there */
+}
+div .backimageStudent {
+    background: url('../Images/Universitystudents.jpg');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+}
+div .backimageLogin {
+    background: url('../Images/Universitydoors.jpg') no-repeat center center fixed;
+    
+    background-size: cover;
+}
+div .backimageAdmin {
+    background: url('../Images/Universityadmin.jpg') no-repeat center center fixed;
+    background-size: cover;
+}
+div .backimageHome {
+    background: url('../Images/UniversityHome.jpg') no-repeat center center fixed;
+    background-size: cover;
+}
+div .lightgrey {
+    color: lightgrey;
+}
+a{
+    font-weight: bold;
+    color: ghostwhite;
+}
+.helptext {
+    font-weight: 600;
+    background-color:lightgrey;
+    opacity:0.8;
+}
+.lowopacity {
+    opacity: 0.2;
+}
+.mediumopacity {
+    opacity: 0.5;
+}
+.largeopacity {
+    opacity: 0.9;
+}
+.upperpadding {
+    padding-top:2px;
+}
+.nologgeado{
+    margin-top:20px;
+}
+.top-margin {
+    margin-top:10px;
+}
+p {
+    margin-left:5px;
+    margin-right:5px;
+}
+.full-width {
+    width:100%;
 }

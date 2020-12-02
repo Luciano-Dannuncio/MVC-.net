@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace MVCnetcore.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "student")]
     public class RegisterToSubjectController : Controller
     {
         public IActionResult Index()
@@ -27,12 +27,32 @@ namespace MVCnetcore.Controllers
 
         [HttpPost]
         public IActionResult Inscription(int classid, int subjectid)
-        {
-            var tryiduser = HttpContext.Session.GetInt32("userId");
-            int iduser =  tryiduser ?? default;
+        {         
+            var claimmail = User.Claims.ToArray();
+            string usermail = claimmail[0].Value;
+            int iduser;
+            ClassModel inscriptiondata;
 
             try
             {
+                using (var db = new Models.DB.AlkemyChallengeCDBContext())
+                {
+                    var userid = (from d in db.Users
+                                  where d.EmailUsers == usermail
+                                  select d.IdUsers
+                                  ).FirstOrDefault();
+
+                    if (userid == 0)
+                    {
+                        throw new Exception("Ha ocurrido un error inesperado, intentelo nuevamente o contactese con la universidad");
+                    }
+                    else
+                    {
+                        iduser = userid;
+                    }
+
+                }
+
                 using (var db = new Models.DB.AlkemyChallengeCDBContext())
                 {
                         
@@ -48,12 +68,25 @@ namespace MVCnetcore.Controllers
                         Models.DB.Inscriptions inscription = (from d in db.Inscriptions
                                                                  where d.IdClassesInscriptions == classid
                                                                  && d.IdSubjectsInscriptions == subjectid
-                                                                 && d.IdUsersInscriptions == 1// iduser
+                                                                 && d.IdUsersInscriptions == iduser
+                                                                 && d.ActiveInscriptions == true
                                                                  select d
                                                                ).FirstOrDefault();
                         if (inscription == null)
                         {
-                            Models.DB.Inscriptions newinscription = new Models.DB.Inscriptions(classid,subjectid,1,true);
+                             inscriptiondata = (from d in db.Classes
+                                                          where d.IdClasses == classid
+                                                          && d.IdSubjects == subjectid
+                                                          select new ClassModel
+                                                          { 
+                                                            SubjectName = (from c in db.Subjects
+                                                                           where c.IdSubjects == subjectid
+                                                                           select c.NameSubjects
+                                                                           ).FirstOrDefault(),
+                                                            ClassroomClasses = d.ClassroomClasses
+                                                          }).FirstOrDefault();
+
+                            Models.DB.Inscriptions newinscription = new Models.DB.Inscriptions(classid,subjectid,iduser,true);
                             db.Inscriptions.Add(newinscription);
 
                             db.SaveChanges();
@@ -73,9 +106,9 @@ namespace MVCnetcore.Controllers
                             "cupos disponibles o no encontrarse la materia/comision activas";
                         return RedirectToAction("index", "ConsultSubjects");
                     }
-                  
+                    
                     TempData["Success"] = "Se ha realizado la inscripcion a la comisión : "
-                        + classid + " de la materia " + subjectid + " Exitosamente";
+                        + inscriptiondata.ClassroomClasses + " de la materia " + inscriptiondata.SubjectName + " Exitosamente";
 
                     return RedirectToAction("index", "ConsultSubjects");
 

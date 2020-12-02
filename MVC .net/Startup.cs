@@ -43,26 +43,7 @@ namespace MVCnetcore
             });
 
 
-            // services.AddScoped<VerifySession>();
-            /* services.AddSession(options => {
-                 options.IdleTimeout = TimeSpan.FromMinutes(1);//You can set Time   
-             });
-             services.AddMvc(config => {
-                 var policy = new AuthorizationPolicyBuilder()
-                                 .RequireAuthenticatedUser()
-                                 .Build();
-                 config.Filters.Add(new AuthorizeFilter(policy));
-         
-            
-            services.AddDefaultIdentity<IdentityUser, IdentityRole>(
-                options => options.SignIn.RequireConfirmedAccount = false)
-             
-             .AddDefaultTokenProviders()
-             .AddEntityFrameworkStores<AlkemyChallengeCDBContext>();
-              */
-
-            //.AddUserStore<Models.DB.Users>()
-            //.AddRoleStore<Models.DB.Roles>();
+           
             services.AddSession();
             services.AddMvc();
             services.AddRazorPages();

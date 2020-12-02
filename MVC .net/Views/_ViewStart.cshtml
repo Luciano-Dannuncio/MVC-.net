@@ -1,3 +1,14 @@
 ﻿@{
-    Layout = "_Layout";
+    if (Context.User.IsInRole("admin"))
+    {
+        Layout = "_LayoutAdmin";
+    }
+    else if (Context.User.IsInRole("student"))
+    {
+        Layout = "_LayoutStudent";
+    }
+    else
+    {
+        Layout = "_Layout";
+    }
 }

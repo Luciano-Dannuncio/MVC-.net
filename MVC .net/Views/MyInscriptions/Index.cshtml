@@ -1,0 +1,88 @@
+﻿@{
+    @model List<InscriptionsModel>
+
+    ViewData["Title"] = "Index";
+}
+
+<div class="backimageStudent rounded">
+    <br /><br />
+    <div class="bg-dark largeopacity ">
+        <h2 class="text-center text-light">Listado de Inscripciones</h2>
+    </div>
+    <br />
+    <div class="bg-dark largeopacity">
+        <p class="text-center text-light font-weight-bold">Visualizá o cancelá tus inscripciones </p>
+    </div>
+
+</div>
+<br />
+<div class="container-fluid bg-secondary rounded largeopacity">
+    <br />
+    <div class="SuccessMessage text-success font-weight-bold text-center bg-dark rounded largeopacity" name="Success" id="Success">
+        <p>@ViewBag.Success</p>
+    </div>
+
+    <div class="danger text-danger font-weight-light text-center bg-dark rounded largeopacity" name="warning" id="warning">
+        <p>@ViewBag.Warning</p>
+    </div>
+    <div class="danger text-danger font-weight-bold text-center bg-dark rounded largeopacity" name="error" id="error">
+        <p>@ViewBag.Error</p>
+    </div>
+
+    <div class="row">
+        <div class="text-center align-content-center col-lg-2 offset-lg-3 col-md-3 offset-md-2 col-sm-6">
+            <form action="@Url.Content("~/Home/")" method="post">
+
+                <input type="submit" value="Home" class="btn btn-dark text-light" />
+            </form>
+        </div>
+
+        <div class="text-center upperpadding col-lg-2 offset-lg-2 col-md-3 offset-md-2 col-sm-6">
+            <form action="@Url.Content("~/ConsultSubjects/")" method="post">
+
+                <input type="submit" value="Inscribirme" class="btn btn-dark text-light" />
+            </form>
+        </div>
+    </div>
+    <br />
+
+    @{ if (Model.Count != 0)
+        {
+            foreach (InscriptionsModel inscription in Model)
+            {
+                <br />
+                <div class="card card-body  bg-dark border-dark border-3">
+                    <form method="post" name="cancelform" id="cancelform" action="@Url.Content("~/MyInscriptions/CancelInscription/")">
+                        <div class="row ">
+                            <div class="col-lg-4 col-md-4 offset-lg-1 offset-md-1 col-sm-6 bg-transparent">
+                                <input type="hidden" name="inscriptionid" id="inscriptionid" value="@inscription.Id" />
+                                <h5 class="text-white align-text-center text-center">Cátedra: @inscription.SubjectName</h5>
+                            </div>
+                            <div class="col-lg-4 col-md-4 col-sm-6 bg-transparent">
+                                <h5 class="text-center text-white align-text-center">Comisión: @inscription.ClassNumber</h5>
+                            </div>
+
+                            <div class="col-lg-3 col-sm-6">
+                                <input class="btn btn-primary active float-right text-white" type="submit" onclick="confirmcancel()" value="Cancelar Inscripción" />
+                            </div>
+
+                        </div>
+                    </form>
+                </div>
+                <br />
+            }
+        }
+    }
+</div>
+<script type="text/javascript">
+    function confirmcancel() {
+        if (!confirm('¿Está seguro que desea eliminar la inscripción?')) {
+            event.preventDefault();
+        }
+        else
+        {
+            document.cancelform.submit()
+        }
+    }
+</script>
+

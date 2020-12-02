@@ -11,29 +11,33 @@ using System.Text;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.EntityFrameworkCore.Design;
-using Microsoft.EntityFrameworkCore.SqlServer;
 using Microsoft.AspNetCore.Authorization;
-
 
 
 namespace MVCnetcore.Controllers
 {
-    [AllowAnonymous]
+    
     public class LogInController : Controller
     {
     
         public IActionResult Index()
         {
-            if (TempData["Success"] != null) { ViewBag.Success = TempData["Success"]; }
+            if ( (User.IsInRole("admin")) || (User.IsInRole("student"))) 
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            else 
+            {
+                if (TempData["Success"] != null) { ViewBag.Success = TempData["Success"]; }
 
-            if (TempData["Warning"] != null) { ViewBag.Error = TempData["Warning"]; }
+                if (TempData["Warning"] != null) { ViewBag.Error = TempData["Warning"]; }
 
-            if (TempData["Error"] != null) { ViewBag.Error = TempData["Error"]; }
-           
-            return View();
+                if (TempData["Error"] != null) { ViewBag.Error = TempData["Error"]; }
+
+                return View();
+            }
         }
-
+        [AllowAnonymous]
         public IActionResult NewUser()
         {
             if (TempData["Success"] != null) { ViewBag.Success = TempData["Success"]; }
@@ -44,12 +48,12 @@ namespace MVCnetcore.Controllers
             
             return View();
         }
-
+        [AllowAnonymous]
         [HttpPost]
         public async Task<IActionResult> Index(string email, string password) 
         {
             var encpass = EncryptPass(password);
-           
+            string role = "";
             try
             {
                 UserLogInModel oUser = new UserLogInModel();
@@ -74,11 +78,14 @@ namespace MVCnetcore.Controllers
                         return View();
                     }
                     
+                    if (oUser.IdRoles == 1) { role = "admin"; } 
+                    else if(oUser.IdRoles == 2) { role = "student"; }
+                    
                     var claims = new List<Claim>
-                    {
+                    {                                            
+                        new Claim(ClaimTypes.Email, oUser.Email),
                         new Claim(ClaimTypes.Name, oUser.Name ),
-                        new Claim(ClaimTypes.Email, oUser.Email)
-                      
+                        new Claim(ClaimTypes.Role, role)
                     };
 
                     var claimsIdentity = new ClaimsIdentity(claims, "./LogIn");
@@ -86,6 +93,9 @@ namespace MVCnetcore.Controllers
                     await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,new ClaimsPrincipal(claimsIdentity));
                    
                 }
+                
+                if (role == "admin") { return RedirectToAction("Index", "ManageSubjects"); }
+                
                 return RedirectToAction("Index", "Home");
             }
             catch (Exception ex)
@@ -95,16 +105,17 @@ namespace MVCnetcore.Controllers
             }            
         }
 
-        //AUTENTICACION FUNCIONA FALTA APLICAR ROLES Y A LO VISUAL
-
+        [AllowAnonymous]
         [HttpPost]
-        public IActionResult CreateUser(string email, string nameuser,string password, string password2)
+        public async Task<IActionResult> CreateUser(string email, string nameuser,string password, string password2)
         {
             var correctpass = password.Equals(password2);
+            string role = "";
             if (correctpass == true)
             {
                 try
                 {
+                    UserLogInModel oUser = new UserLogInModel();
                     string encpass = EncryptPass(password);
                     
                     using (var db = new Models.DB.AlkemyChallengeCDBContext())
@@ -121,18 +132,53 @@ namespace MVCnetcore.Controllers
                             
                             db.SaveChanges();
 
-
                         }
                         else 
                         {
-                            TempData["Error"] = "Ya existe un usuario registrado con ese Email.";
+                            TempData["Error"] = "Ya existe una cuenta registrada con ese email.";
                             return RedirectToAction("NewUser", "LogIn");
                         }
 
-                    }
-                    TempData["Success"] ="Usuario creado exitosamente";
+                        TempData["Success"] = "Cuenta creada exitosamente";
+                        oUser = (from d in db.Users
+                                 where d.EmailUsers == email
+                                 && d.PasswordUsers == encpass
+                                 && d.ActiveUsers == true
+                                 select new UserLogInModel
+                                 {
+                                     Id = d.IdUsers,
+                                     Email = d.EmailUsers,
+                                     Name = d.NameUsers,
+                                     Password = d.PasswordUsers,
+                                     IdRoles = d.IdRoles
+                                 }).FirstOrDefault();
 
-                    return RedirectToAction("Index", "LogIn");
+                        if (oUser == null)
+                        {
+                            ViewBag.Error = "Usuario o Contraseña Incorrectas";
+                            return View();
+                        }
+
+                        if (oUser.IdRoles == 1) { role = "admin"; }
+                        else if (oUser.IdRoles == 2) { role = "student"; }
+
+                        var claims = new List<Claim>
+                    {
+                        new Claim(ClaimTypes.Email, oUser.Email),
+                        new Claim(ClaimTypes.Name, oUser.Name ),
+                        new Claim(ClaimTypes.Role, role)
+                    };
+
+                        var claimsIdentity = new ClaimsIdentity(claims, "./LogIn");
+
+                        await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
+
+                    }
+
+                    if (role == "admin") { return RedirectToAction("Index", "ManageSubjects"); }
+
+                    return RedirectToAction("Index", "Home");
+                    // return RedirectToAction("Index", "LogIn"); //loggear directamente
                 }
                 catch (Exception ex)
                 {
@@ -142,10 +188,18 @@ namespace MVCnetcore.Controllers
             }
             else
             {
-                TempData["Warning"] ="Las contraseñas no coinciden, intentelo nuevamente";
+                TempData["Warning"] ="Las contraseñas no coinciden, intentalo nuevamente";
                 return RedirectToAction("NewUser", "LogIn");
             }
         }
+        [Authorize]
+        public async  Task<IActionResult> LogOut() 
+        {
+            await HttpContext.SignOutAsync(
+            CookieAuthenticationDefaults.AuthenticationScheme);
+            return RedirectToAction("Index","LogIn");
+        }
+
 
         // ---------------------------------------------Funciones----------------------------------------------
 

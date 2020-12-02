@@ -1,44 +1,57 @@
 ﻿@{
     @model List<SubjectModel>
-
     ViewData["Title"] = "Index";
+  
 }
+<div class="backimageAdmin">
+        <h2 class="text-center">Gestionar Materias</h2>
+        <br />
+        <p class="text-center font-weight-bold">creá, modificá o eliminá los profesores.</p>
+        
+</div>
+<br />
+<div class="container-fluid rounded bg-secondary largeopacity">
+    <br />
+    <div class="SuccessMessage text-success font-weight-bold text-center bg-dark rounded largeopacity" name="AddSubjectSuccess" id="AddSubjectSuccess">
+        <p>@ViewBag.Success</p>
+    </div>
 
-<h1 class="text-center">Gestionar Materias</h1>
-<br />
-<div class="row text-center col-lg-6 col-lg-offset-3 col-md-8 col-md-offset-2 col-sm-12">
-    <a href="./ManageSubjects/NewSubject">Agregar Nueva Materia</a>
-</div>
-<br />
-<div class="Success" name="AddSubjectSuccess" id="AddSubjectSuccess">
-    <span>@ViewBag.Success</span>
-</div>
-<div class="Danger" name="AddSubjectUnsuccessful" id="AddSubjectUnsuccessful">
-    <bold>@ViewBag.Warning</bold>
-</div>
-<br />
-<div class="danger" name="wrongenter" id="wrongenter">
-    <bold>@ViewBag.Error</bold>
-</div>
+    <div class="danger text-danger font-weight-light text-center bg-dark rounded largeopacity" name="warning" id="warning">
+        <p>@ViewBag.Warning</p>
+    </div>
+    <div class="danger text-danger font-weight-bold text-center bg-dark rounded largeopacity" name="error" id="error">
+        <p>@ViewBag.Error</p>
+    </div>
 
-<br />
-<div class="success">
+    <div class="row text-center col-lg-2 offset-lg-5 col-md-4 offset-md-4 col-sm-12">
+        <a class="btn btn-dark text-light" href="./ManageSubjects/NewSubject">Nueva Cátedra</a>
+    </div>
+    <br />
     @{ if (Model.Count != 0)
         {
             foreach (SubjectModel subject in Model)
             {
-            <div>
-                 <form method="post" action="@Url.Content("~/ManageSubjects/ModifySubject")">
-                        <div class="row col-lg-10 col-lg-offset-2">
-                            <h4 class="col-lg-8 col-md-8 col-sm-12 text-left">@subject.NameSubject</h4>
-                            <input type="hidden"  name="subjectName" id="subjectName" value="@subject.NameSubject" />
-                            <input type="hidden" name="SubjectIdClass" id="SubjectIdClass" value="@subject.Id" />
-                            <input type="hidden" name="SubjectHeadTeacherId" id="SubjectHeadTeacherId" />
-                            <input type="submit" class="btn-sm btn-success"  value="Modificar" />
-                            <a class="col-lg-4 col-md-4 col-sm-12 text-center" href=""></a>
-                        </div>
-                 </form>
-            </div>
+                <div class="card card-body bg-dark border-dark border-3">
+                        <div class="row">
+                            <form class="row col-lg-9 col-md-9 offset-lg-1 offset-md-1 col-sm-12" method="post" action="@Url.Content("~/ManageSubjects/ModifySubject")">
+                                <input type="hidden" name="subjectName" id="subjectName" value="@subject.NameSubject" />
+                                <input type="hidden" name="SubjectIdClass" id="SubjectIdClass" value="@subject.Id" />
+                                <input type="hidden" name="SubjectHeadTeacherId" id="SubjectHeadTeacherId" value="@subject.IdHeadTeacher" />
+
+                                    <div class="col-lg-8 col-md-8  offset-lg-1 offset-md-1 col-sm-12 bg-transparent">
+                                        <h4 class="text-white text-left">@subject.NameSubject</h4>
+                                    </div>
+                                    <div class="col-lg-3 text-center">
+                                        <input type="submit" class="btn btn-primary active text-white float-right" value="Modificar" />
+                                    </div>
+                            </form>
+                            <form class="col-lg-2 col-md-2 col-sm-6 bg-transparent text-center" method="post" action="@Url.Content("~/ManageSubjects/DeleteSubject")">
+                                <input type="hidden" name="subjectid" id="subjectid" value="@subject.Id" />  
+                                <input type="submit" class="btn btn-danger active text-white float-right" value="Eliminar" />
+                            </form>
+                        </div>                  
+                </div>
+                <br />
             }
         }
     }
